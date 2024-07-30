@@ -1,118 +1,98 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
+/** Developed by Gianmattia Gherardi - 2023 */
 
-import React from 'react';
-import type {PropsWithChildren} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+import { Colors } from 'react-native/Libraries/NewAppScreen';
+import { useColorScheme } from 'react-native';
+import React, { useEffect } from 'react';
+import HomeScreen from './src/Screens/HomeScreen';
+import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { Constants } from './src/lib/Constants';
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faWhatsapp } from '@fortawesome/free-brands-svg-icons/faWhatsapp';
+import { fab } from '@fortawesome/free-brands-svg-icons'
+import { faSquareCheck } from '@fortawesome/free-solid-svg-icons/faSquareCheck'
+import { faBeerMugEmpty } from '@fortawesome/free-solid-svg-icons/faBeerMugEmpty'
+import { faCalendar } from '@fortawesome/free-solid-svg-icons/faCalendar'
+import { faArrowDown, faArrowDownLong, faArrowRotateLeft, faCalendarDay, faCalendarWeek, faCamera, faCameraRetro, faCarSide, faCheck, faCheckCircle, faChevronDown, faChevronLeft, faChevronRight, faChevronUp, faCircleInfo, faCircleNotch, faCog, faEnvelope, faExclamation, faExclamationCircle, faFileCirclePlus, faFilePdf, faFloppyDisk, faFolderPlus, faFolderTree, faHourglassEmpty, faHourglassEnd, faHourglassHalf, faHourglassStart, faImages, faPaperPlane, faPencil, faPlus, faSave, faSearch, faTable, faTableCells, faTableCellsLarge, faTableColumns, faTableList, faTableTennis, faTimeline, faTrash, faUpload, faUser, faWarning, faX, faXmarkCircle } from '@fortawesome/free-solid-svg-icons';
+import NewEventScreen from './src/Screens/NewEventScreen';
+import EventHomeScreen from './src/Screens/EventHomeScreen';
+import { ThemeColors } from './src/lib/GlobalStyles';
+import ViewPdfScreen from './src/Screens/ViewPdfScreen';
+import EditEventScreen from './src/Screens/EditEventScreen';
+import SplashScreen from 'react-native-splash-screen';
+import AllEventsScreen from './src/Screens/AllEventsScreen';
+import NewExpenseReportScreen from './src/Screens/NewExpenseReportScreen';
+import FlashMessage from 'react-native-flash-message';
+import { faCircle } from '@fortawesome/free-regular-svg-icons';
+import LoginScreen from './src/Screens/LoginScreen';
+import NotificationManager from './src/lib/NotificationManager';
+import DebugScreen from './src/Screens/DebugScreen';
+import RefundKmScreen from './src/Screens/RefundKmScreen';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+library.add(fab, faSquareCheck, faBeerMugEmpty, faCalendar, faCalendarDay, faTrash, faPlus,
+  faCalendarWeek, faTable, faTableCells, faTableList, faTableColumns, faTableCellsLarge, faTableTennis,
+  faTimeline, faCamera, faUpload, faX, faSearch, faChevronDown, faChevronLeft, faChevronRight, faChevronUp,
+  faCheck, faSave, faFloppyDisk, faCog, faPaperPlane, faFilePdf, faUser, faPencil, faFolderPlus, faFolderTree,
+  faArrowDown, faArrowDownLong, faFileCirclePlus, faCheckCircle, faXmarkCircle, faCircleInfo, faExclamationCircle,
+  faCircle, faCircleNotch, faHourglassStart, faHourglassHalf, faHourglassEmpty, faHourglassEnd, faArrowRotateLeft,
+  faCameraRetro, faEnvelope, faCarSide, faImages, faWhatsapp)
 
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
+// Android only
+// NotificationManager.createChannel(Constants.Channels.Reminder.id, Constants.Channels.Reminder.name);
+const Stack = createNativeStackNavigator();
 
-function Section({children, title}: SectionProps): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-}
-
-function App(): React.JSX.Element {
+function App(): JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
 
+  const TLMTheme = {
+    ...DefaultTheme,
+    colors: {
+      ...DefaultTheme.colors,
+      background: '#fff'
+    },
+  };
+
+  useEffect(() => {
+    SplashScreen.hide();        
+  }, []);
+
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+    <>
+      <NavigationContainer>
+        <Stack.Navigator>
+          {/* <Stack.Screen name={Constants.Navigation.DebugScreen} component={DebugScreen} options={commonOptions} /> */}
+          <Stack.Screen name={Constants.Navigation.LoginScreen} component={LoginScreen} options={loginScreenOptions} />
+          <Stack.Screen name={Constants.Navigation.Home} component={HomeScreen} options={commonOptions} />
+          <Stack.Screen name={Constants.Navigation.AllEvents} component={AllEventsScreen} options={commonOptions} />
+          <Stack.Screen name={Constants.Navigation.NewEvent} component={NewEventScreen} options={commonOptions} />
+          <Stack.Screen name={Constants.Navigation.EventHome} component={EventHomeScreen} options={commonOptions} />
+          <Stack.Screen name={Constants.Navigation.ViewPdf} component={ViewPdfScreen} options={commonOptions} />
+          <Stack.Screen name={Constants.Navigation.EditEventScreen} component={EditEventScreen} options={commonOptions} />
+          <Stack.Screen name={Constants.Navigation.RefundKmScreen} component={RefundKmScreen} options={commonOptions} />
+          <Stack.Screen name={Constants.Navigation.NewExpenseReport} component={NewExpenseReportScreen} options={commonOptions} />
+        </Stack.Navigator>
+      </NavigationContainer>
+      <FlashMessage position='top' />
+    </>
   );
 }
 
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+const loginScreenOptions = {
+  headerShown: false,
+  statusBarColor: ThemeColors.white
+}
+
+const commonOptions = {
+  headerStyle: {
+    backgroundColor: ThemeColors.primary
   },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-});
+  backgroundColor: ThemeColors.primary,
+  statusBarColor: ThemeColors.primary,
+  headerTintColor: ThemeColors.white
+}
 
 export default App;
