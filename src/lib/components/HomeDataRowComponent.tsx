@@ -64,7 +64,6 @@ export const HomeDataRowComponent = ({ event, onDelete, index, navigation }: IHo
             eventToEdit.sentToCompany = true;
             dataContext.Events.saveData(events);
             setStateEvent(eventToEdit);
-            // This is not working!
             BusinessEvent.deleteNotifications(event);
             swipableRef?.current?.close();
         }

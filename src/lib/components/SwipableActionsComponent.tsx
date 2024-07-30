@@ -11,7 +11,7 @@ export const renderRightAction = (text: string, icon: IconProp, color: string, a
           <RectButton
               style={[styles.rightAction, { backgroundColor: color }]}
               onPress={() => action()}>
-              <InputSideButton text={text} fontSize={10} textPosition={'bottom'} icon={icon} pressFunction={(() => {})} iconColor={ThemeColors.white} stretchHeight={true} />
+              <InputSideButton text={text} fontSize={9} textPosition={'bottom'} icon={icon} pressFunction={(() => {})} iconColor={ThemeColors.white} stretchHeight={true} />
           </RectButton>
       </Animated.View>
   );

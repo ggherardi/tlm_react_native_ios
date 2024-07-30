@@ -22,7 +22,7 @@ const RefundKmScreen = ({ navigation, route }: any) => {
   const [arrivalCity, setArrivalCity] = useState(event.refundArrivalCity);
   const [totalTravelledKms, setTotalTravelledKms] = useState(event.totalTravelledKms);
   const [travelDate, setTravelDate] = useState<Date | undefined>(event.travelDate ? new Date(event.travelDate) : new Date());
-  const [travelDateString, setTravelDateString] = useState<string>(event.travelDate);
+  const [travelDateString, setTravelDateString] = useState<string>(event.travelDate ? event.travelDate : new Date().toString());
   const [refundForfait, setRefundForfait] = useState(event.travelRefundForfait);
   const [isFormValid, setIsFormValid] = useState(true);
   const [validationErrors, setValidationErrors] = useState<any>({});

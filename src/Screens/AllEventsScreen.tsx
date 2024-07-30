@@ -47,7 +47,7 @@ const AllEventsScreen = ({ navigation, route }: any) => {
   };
 
   Utility.OnFocus({ navigation: navigation, onFocusAction: refreshData });
-
+  console.log("AppHeight: ", appHeight);
   return (
     <NativeBaseProvider>
       {events && events.length ? (
