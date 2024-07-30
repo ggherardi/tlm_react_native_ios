@@ -2,7 +2,7 @@ TODO:
 
 - TLM Logo is white on grey background
 - Datepicker is grey on grey background
-- Button in Login screen is ugly
+OK - Button in Login screen is ugly
 
 
 

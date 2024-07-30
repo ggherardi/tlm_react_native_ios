@@ -28,11 +28,10 @@ const RefundKmScreen = ({ navigation, route }: any) => {
   const [validationErrors, setValidationErrors] = useState<any>({});
   const [isLoading, setIsLoading] = useState(false);
   const [showDateTimePicker, setShowDateTimePicker] = useState(false);
-  console.log("Travel Date: ", travelDate);
+
   useEffect(() => {
     useCustomHeaderWithButtonAsync(navigation, Utility.GetEventHeaderTitle(event), () => saveEvent(), undefined, 'Rimborso chilometrico', !isFormValid, 'salva');
   });
-  console.log("TravelDateString: ", travelDateString);
 
   const saveEvent = async () => {
     setIsLoading(true);

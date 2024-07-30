@@ -66,14 +66,14 @@ function App(): JSX.Element {
         <Stack.Navigator>
           {/* <Stack.Screen name={Constants.Navigation.DebugScreen} component={DebugScreen} options={commonOptions} /> */}
           <Stack.Screen name={Constants.Navigation.LoginScreen} component={LoginScreen} options={loginScreenOptions} />
-          {/* <Stack.Screen name={Constants.Navigation.Home} component={HomeScreen} options={commonOptions} />
+          <Stack.Screen name={Constants.Navigation.Home} component={HomeScreen} options={commonOptions} />
           <Stack.Screen name={Constants.Navigation.AllEvents} component={AllEventsScreen} options={commonOptions} />
           <Stack.Screen name={Constants.Navigation.NewEvent} component={NewEventScreen} options={commonOptions} />
           <Stack.Screen name={Constants.Navigation.EventHome} component={EventHomeScreen} options={commonOptions} />
           <Stack.Screen name={Constants.Navigation.ViewPdf} component={ViewPdfScreen} options={commonOptions} />
           <Stack.Screen name={Constants.Navigation.EditEventScreen} component={EditEventScreen} options={commonOptions} />
           <Stack.Screen name={Constants.Navigation.RefundKmScreen} component={RefundKmScreen} options={commonOptions} />
-          <Stack.Screen name={Constants.Navigation.NewExpenseReport} component={NewExpenseReportScreen} options={commonOptions} /> */}
+          <Stack.Screen name={Constants.Navigation.NewExpenseReport} component={NewExpenseReportScreen} options={commonOptions} />
         </Stack.Navigator>
       </NavigationContainer>
       <FlashMessage position='top' />

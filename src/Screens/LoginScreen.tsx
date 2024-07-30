@@ -82,8 +82,8 @@ const LoginScreen = ({ navigation, route }: any) => {
           <FormControl style={GlobalStyles.mt15} isRequired isInvalid={"email" in validationErrors}>
             <LoginInputComponent defaultValue={email} placeholder='email*' onChange={(e: any) => setEmail(e.nativeEvent.text)} keyboardType='email-address' borderColor={"email" in validationErrors ? 'red.500' : 'gray.300'} />
           </FormControl>
-          <Pressable style={({ pressed }) => [{ opacity: pressed ? 0.2 : 1 }, GlobalStyles.mt15]} onPress={() => login()}>
-            <Text style={[styles.button]}>{isLoading ? (<LoaderComponent color={ThemeColors.white} size={LoaderSize.small} />) : ('ACCEDI')}</Text>
+          <Pressable style={({ pressed }) => [{ opacity: pressed ? 0.2 : 1 }, styles.buttonContainer, GlobalStyles.mt15]} onPress={() => login()}>
+            <Text style={[styles.buttonText]}>{isLoading ? (<LoaderComponent color={ThemeColors.white} size={LoaderSize.small} />) : ('ACCEDI')}</Text>
           </Pressable>
         </View>
       </View>
@@ -104,15 +104,16 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     resizeMode: 'contain'
   },
-  button: {
-    alignSelf: 'center',
-    textAlign: 'center',
+  buttonText: {
+    color: ThemeColors.white,
+    lineHeight: 40,
+    alignSelf: 'center'
+  },
+  buttonContainer: {
+    justifyContent: 'center',
     height: 40,
-    verticalAlign: 'middle',
     backgroundColor: ThemeColors.primary,
-    borderRadius: 50,
-    width: '100%',
-    color: ThemeColors.white
+    borderRadius: 50
   }
 });
 
