@@ -60,6 +60,17 @@ export const FileManager = {
     });
   },
 
+  createFolder: async (path: string): Promise<string> => {
+    console.log(ReactNativeBlobUtil.fs.dirs);
+    return new Promise<string>(async (resolve, reject) => {
+      const folderToCreate = `${ReactNativeBlobUtil.fs.dirs.DocumentDir}/${path}`;
+      console.log("Folder to create:", folderToCreate);
+      ReactNativeBlobUtil.fs.mkdir(folderToCreate)
+        .then(() => resolve(folderToCreate))
+        .catch(() => reject());
+    });
+  },
+
   deleteFileOrFolder: (path: string) => {
     console.log("Path is: ", path);
     ReactNativeBlobUtil.fs.unlink(path)
@@ -68,6 +79,7 @@ export const FileManager = {
   },
 
   moveFile: async (sourcePath: string, destinationPath: string) => {
+    console.log("Moving file from path: ", sourcePath, " to path: ", destinationPath);
     return new Promise<boolean>((resolve, reject) => {
       ReactNativeBlobUtil.fs.mv(sourcePath, destinationPath)
         .then((v) => {
@@ -98,8 +110,9 @@ export const FileManager = {
   resizeImage: async (imagePath: string, outputDirectory: string, width: number, height: number): Promise<Response> => {
     return new Promise(async (resolve, reject) => {
       try {
-        console.log("starting resize");
+        console.log("starting resize for image with imagePath: ", imagePath, " outputDirectory: ", outputDirectory);
         const response = await ImageResizer.createResizedImage(imagePath, width, height, 'JPEG', 100, undefined, outputDirectory);
+        console.log("resize done")
         resolve(response);
       } catch (err) {
         console.log(`Could not resize image with path ${imagePath}: `, err);

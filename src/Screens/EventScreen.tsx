@@ -54,7 +54,7 @@ const EventScreen = ({ route, navigation }: any) => {
         await PDFBuilder.createExpensesPdfAsync(event, event.directoryName, event.reportFileName);
         navigation.navigate(Constants.Navigation.ViewPdf, { event: event });
     }
-    console.log("AppHeight: ", appHeight);
+
     return (
         <NativeBaseProvider>
             <GestureHandlerRootView>

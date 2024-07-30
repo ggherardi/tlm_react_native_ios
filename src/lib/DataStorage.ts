@@ -21,15 +21,12 @@ export default class DataStorage {
 
   save = (key: string, dataContextKey: string, value: any) => {    
     const saveConstant = (SaveConstants as any)[dataContextKey];
-    console.log("SaveConstant: ", saveConstant);
     if (saveConstant) {
       switch (saveConstant.dataType) {
         case 'array':
-          console.log("case array");
           value = JSON.stringify(value);
           break;
         default:
-          console.log("case default");
           break;
       }
       console.log("SAVING Key: ", key, " Value: ", value);

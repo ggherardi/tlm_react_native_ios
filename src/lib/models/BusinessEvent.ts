@@ -33,7 +33,7 @@ export class BusinessEvent extends BusinessDataTypeBase {
   // File properties
   directoryName!: string;
   directoryPath!: string;
-  fullFilePath!: string;
+  pdfFullFilePath!: string;
   reportFileName!: string;
   expensesDataContextKey!: string;
 

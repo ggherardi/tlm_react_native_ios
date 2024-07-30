@@ -22,7 +22,7 @@ export class ExpenseReport extends BusinessDataTypeBase {
   }
 
   static extraDeleteSteps(element: ExpenseReport): void {
-    // FileManager.deleteFileOrFolder(element.photoFilePath);
+    FileManager.deleteFileOrFolder(element.photoFilePath);
   }
 
   static generateKmRefund(event: BusinessEvent): ExpenseReport {

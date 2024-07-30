@@ -8,10 +8,12 @@ import dataContext from './models/DataContext';
 import { Images } from '../assets/Images';
 
 export const PDFBuilder = {
-  createExpensesPdfAsync: async (event: BusinessEvent, directoryName: string, fileName: string): Promise<RNHTMLtoPDF.Pdf> => {
+  createExpensesPdfAsync: async (event: BusinessEvent, fileName: string): Promise<RNHTMLtoPDF.Pdf> => {
     return new Promise(async (resolve, reject) => {
-      const directory = `Documents/${directoryName}`;
+      const directory = `Documents`;
+      console.log(`Creating pdf in directory: `, directory);
       const expenses = dataContext.ExpenseReports ? dataContext.ExpenseReports.getAllData() : []
+      console.log("HOW MANY EXPENSES!!!!!! ", dataContext.ExpenseReports);
       const options = {
         html: PDFBuilder.generateHtml(event, expenses),
         fileName: fileName,
@@ -20,6 +22,7 @@ export const PDFBuilder = {
 
       let file = await RNHTMLtoPDF.convert(options).catch(e => console.log("Error while creating pdf: ", e));
       if (file) {
+        console.log(`File created: `, file.filePath);
         resolve(file);
       } else {
         reject(undefined);

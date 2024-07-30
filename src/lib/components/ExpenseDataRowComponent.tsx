@@ -35,7 +35,7 @@ export const ExpenseDataRowComponent = ({ expense: expense, event, onDelete, ind
 
     const renderRightActions = () => (
         <View style={{ width: 80, flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row' }}>
-            {renderRightAction("Cancellare l'evento?", 'trash', '#dd2c00', deleteExpense, swipableRef)}
+            {renderRightAction("Cancellare la spesa?", 'trash', '#dd2c00', deleteExpense, swipableRef)}
         </View>
     );
 

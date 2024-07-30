@@ -91,19 +91,25 @@ const NewEventScreen = ({ navigation, route }: any) => {
     const userProfile = Utility.GetUserProfile();
     const pdfFileName = `nota_spese_${sanitizedEventName}_${Utility.GetYear(event.startDate)}_${userProfile.surname}_${userProfile.name}`;
     const directoryName = `${sanitizedEventName}_${Utility.FormatDateDDMMYYYY(event.startDate, "-")}_${Utility.FormatDateDDMMYYYY(event.endDate, "-")}_${Utility.GenerateRandomGuid("")}`;
+    const directory = await FileManager.createFolder(directoryName);
+    console.log("Created directory: ", directory);
+    const pdfFullFilePath = `${directory}/${pdfFileName}.pdf`;
     console.log("Creating event pdf..");
-    const createdFile = await PDFBuilder.createExpensesPdfAsync(event, directoryName, pdfFileName);
+    const createdFile = await PDFBuilder.createExpensesPdfAsync(event, pdfFileName);
     event.reportFileName = pdfFileName;
     if (createdFile) {
-      const filePath = createdFile.filePath as string;
-      event.directoryName = directoryName;
-      event.fullFilePath = filePath;
-      event.directoryPath = filePath.substring(0, filePath.lastIndexOf("/"));
-      console.log("Saving all events to memory..");
-      dataContext.Events.saveData(events);
-      Utility.ShowSuccessMessage("Evento creato correttamente");
+      const createdFilePath = createdFile.filePath as string;
+      const moved = await FileManager.moveFile(createdFilePath, pdfFullFilePath);
+      if (moved) {
+        event.directoryName = directory;
+        event.pdfFullFilePath = pdfFullFilePath;
+        event.directoryPath = directory;
+        console.log("Saving all events to memory..");
+        dataContext.Events.saveData(events);
+        Utility.ShowSuccessMessage("Evento creato correttamente");
+      }
 
-      if (hasNotificationPermissions) {
+      if (hasNotificationPermissions && Utility.GetNumberOfDaysBetweenDates(new Date().toString(), event.endDate) > 1) {
         console.log("Scheduling notifications for event..");
         BusinessEvent.scheduleNotifications(event);
       }      
