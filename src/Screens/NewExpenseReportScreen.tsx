@@ -190,6 +190,7 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
                     }
                     // GG: If the resize was successful, we now need to move the resized image to the event folder while renaming it
                     if (resizeOperation) {
+                        console.log("Moving and renaming image from resizeOperation.path: ", resizeOperation.path, " to photoFileFullPath: ", photoFileFullPath);
                         operationResult = await FileManager.moveFile(resizeOperation.path, photoFileFullPath);
                     }
                 }
@@ -203,7 +204,8 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
 
                     if (scannedImageToDelete) {
                         // GG: If we used DocumentScanner, we delete the original saved image from the pictures folder
-                        await FileManager.deleteFileOrFolder(scannedImageToDelete.uri);
+                        console.log("Deleting image created with DocumentScanner with uri: ", scannedImageToDelete.uri);
+                        await FileManager.deleteFileOrFolder(scannedImageToDelete.uri.replace("file://", ""));
                     }
                     dataContext.ExpenseReports.saveData(expenses);
                     const allExpenses = dataContext.ExpenseReports.getAllData();

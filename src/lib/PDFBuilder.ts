@@ -198,8 +198,8 @@ export const PDFBuilder = {
             <div class="col-6 text-center">
               <span>Scontrino per la spesa:</span>
               <span>${expense.name} - ${Utility.FormatDateDDMMYYYY(expense.date)} - ${expense.amount} ${event.mainCurrency.symbol}</span>
-              <div class="d-flex" style="height: 750px; justify-content: center;">
-                <img class="tlm-image mt-5" src="data:image/jpeg;base64, ${encodedImage}">
+              <div class="d-flex" style="height: 550px; justify-content: center;">
+                <img class="tlm-image mt-5" src="data:image/jpg;base64, ${encodedImage}" height="500">
               </div>              
             </div>`;
         html += !isEven ? `

@@ -60,7 +60,7 @@ const AllEventsScreen = ({ navigation, route }: any) => {
           </View>
           <View>
               {/* <InputSideButton icon={faTelegram} text='Get notifications' pressFunction={() => FileManager.ls(events[0].directoryPath.substring(0, events[0].directoryPath.lastIndexOf("/")))}></InputSideButton> */}
-              <InputSideButton icon={faTelegram} text='Get notifications' pressFunction={() => FileManager.ls("/var/mobile/Containers/Data/Application/CD9D71E4-B66E-4ABD-8EB8-D87C732ED8DA/Documents/Evento_31-07-2024_31-08-2024_411034f4928e421c8842e60bf2fb1d40/")}></InputSideButton>
+              {/* <InputSideButton icon={faTelegram} text='Get notifications' pressFunction={() => FileManager.ls("/var/mobile/Containers/Data/Application/CD9D71E4-B66E-4ABD-8EB8-D87C732ED8DA/Documents/Evento_31-07-2024_31-08-2024_411034f4928e421c8842e60bf2fb1d40/")}></InputSideButton> */}
               {/* <InputSideButton icon={faWhatsappSquare} text='Delete notifications' pressFunction={() => console.log(NotificationManager.cancelAllScheduledNotifications(["1000001", "1000002"]))}></InputSideButton> */}
             </View>
           {events != undefined && events.length > 0 && events.map((event: BusinessEvent, index: number) => (
