@@ -118,6 +118,7 @@ const EditEventScreen = ({ navigation, route }: any) => {
           {showStartDateTimePicker && (
             <DateTimePicker
               mode="date"
+              themeVariant='light'
               display="inline"
               locale="it-IT"
               value={eventStartDate}
@@ -151,6 +152,7 @@ const EditEventScreen = ({ navigation, route }: any) => {
           {showEndDateTimePicker && (
             <DateTimePicker
               mode="date"
+              themeVariant='light'
               display="inline"
               locale="it-IT"
               value={eventEndDate}

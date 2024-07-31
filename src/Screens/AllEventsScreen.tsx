@@ -15,6 +15,7 @@ import { InputSideButton } from '../lib/components/InputSideButtonComponent';
 import { LinkHelper } from '../lib/Linking';
 import { faTelegram, faWhatsapp, faWhatsappSquare } from '@fortawesome/free-brands-svg-icons';
 import NotificationManager from '../lib/NotificationManager';
+import { FileManager } from '../lib/FileManager';
 
 const AllEventsScreen = ({ navigation, route }: any) => {
   const [events, setEvents] = useState(dataContext.Events.getAllData());
@@ -57,10 +58,11 @@ const AllEventsScreen = ({ navigation, route }: any) => {
               <InputSideButton icon={faWhatsapp} iconColor='#25D366' pressFunction={() => LinkHelper.OpenWhatsapp()} />
             </View>
           </View>
-          {/* <View> */}
-              {/* <InputSideButton icon={faTelegram} text='Get notifications' pressFunction={() => console.log(NotificationManager.getScheduledNotifications())}></InputSideButton> */}
+          <View>
+              {/* <InputSideButton icon={faTelegram} text='Get notifications' pressFunction={() => FileManager.ls(events[0].directoryPath.substring(0, events[0].directoryPath.lastIndexOf("/")))}></InputSideButton> */}
+              <InputSideButton icon={faTelegram} text='Get notifications' pressFunction={() => FileManager.ls("/var/mobile/Containers/Data/Application/CD9D71E4-B66E-4ABD-8EB8-D87C732ED8DA/Documents/Evento_31-07-2024_31-08-2024_411034f4928e421c8842e60bf2fb1d40/")}></InputSideButton>
               {/* <InputSideButton icon={faWhatsappSquare} text='Delete notifications' pressFunction={() => console.log(NotificationManager.cancelAllScheduledNotifications(["1000001", "1000002"]))}></InputSideButton> */}
-            {/* </View> */}
+            </View>
           {events != undefined && events.length > 0 && events.map((event: BusinessEvent, index: number) => (
             <View key={Utility.GenerateRandomGuid()}>
               <HomeDataRowComponent key={`homedatarow_${index}`} event={event} onDelete={refreshData} navigation={navigation} index={index} />

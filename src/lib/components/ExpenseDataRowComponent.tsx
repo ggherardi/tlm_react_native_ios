@@ -23,7 +23,7 @@ export const ExpenseDataRowComponent = ({ expense: expense, event, onDelete, ind
     };
     const swipableRef = useRef<Swipeable>(null);
 
-    useEffect(() => {        
+    useEffect(() => {
         const userProfile = Utility.GetUserProfile();
         if (!userProfile.swipeExpenseTutorialSeen && index == 0) {
             console.log("hinting");
@@ -31,7 +31,7 @@ export const ExpenseDataRowComponent = ({ expense: expense, event, onDelete, ind
             userProfile.swipeExpenseTutorialSeen = true;
             dataContext.UserProfile.saveData([userProfile]);
         }
-    }, []);    
+    }, []);
 
     const renderRightActions = () => (
         <View style={{ width: 80, flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row' }}>
@@ -52,7 +52,7 @@ export const ExpenseDataRowComponent = ({ expense: expense, event, onDelete, ind
         ]);
     };
 
-    const imageUri = `file:///${expense.photoFilePath}`;
+    const imageUri = `${expense.photoFilePath}`;
 
     return (
         <GestureHandlerRootView>

@@ -128,6 +128,7 @@ const RefundKmScreen = ({ navigation, route }: any) => {
               {showDateTimePicker && (
                 <DateTimePicker
                   mode="date"
+                  themeVariant='light'
                   display="inline"
                   locale="it-IT"
                   value={travelDate ? travelDate : new Date()}

@@ -16,6 +16,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { Dimensions, Image, StyleSheet, Text } from 'react-native';
 import LoaderComponent from '../lib/components/LoaderComponent';
 import { BusinessEvent } from '../lib/models/BusinessEvent';
+import { FileManager } from '../lib/FileManager';
 
 const EventScreen = ({ route, navigation }: any) => {
     const [reports, setReports] = useState<ExpenseReport[]>();
@@ -51,7 +52,12 @@ const EventScreen = ({ route, navigation }: any) => {
     Utility.OnFocus({ navigation: navigation, onFocusAction: refreshData });
 
     const viewPdf = async () => {
-        await PDFBuilder.createExpensesPdfAsync(event, event.directoryName, event.reportFileName);
+        const regeneratedPdfFile = await PDFBuilder.createExpensesPdfAsync(event, event.reportFileName);
+        if (regeneratedPdfFile) {
+            FileManager.deleteFileOrFolder(event.pdfFullFilePath);
+            const pdfFullFilePath = `${event.directoryPath}/${event.reportFileName}.pdf`;
+            const moved = await FileManager.moveFile(regeneratedPdfFile.filePath as string, pdfFullFilePath);
+        }
         navigation.navigate(Constants.Navigation.ViewPdf, { event: event });
     }
 

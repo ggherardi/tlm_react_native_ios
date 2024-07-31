@@ -107,6 +107,14 @@ export const FileManager = {
     });
   },
 
+  encodeBase64: async (path: string): Promise<any> => {
+    return new Promise<any>(async (resolve, reject) => {
+      ReactNativeBlobUtil.fs.readFile(path, 'base64')
+        .then(e => resolve(e))
+        .catch(err => reject(err));
+    });
+  },
+
   resizeImage: async (imagePath: string, outputDirectory: string, width: number, height: number): Promise<Response> => {
     return new Promise(async (resolve, reject) => {
       try {
@@ -119,5 +127,11 @@ export const FileManager = {
         reject(false);
       }
     });
+  },
+
+  ls: async (path: string) => {
+    console.log("listing..");
+    const ls = await ReactNativeBlobUtil.fs.lstat(path);
+    console.log(ls);
   }
 }

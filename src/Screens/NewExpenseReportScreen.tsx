@@ -310,6 +310,7 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
                             {showDateTimePicker && (
                                 <DateTimePicker
                                     mode="date"
+                                    themeVariant='light'
                                     display="inline"
                                     locale="it-IT"
                                     value={expenseDate ? expenseDate : new Date()}
