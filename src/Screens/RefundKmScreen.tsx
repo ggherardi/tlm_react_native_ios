@@ -41,6 +41,7 @@ const RefundKmScreen = ({ navigation, route }: any) => {
     }
     const eventToEdit = events.find(e => e.id == event.id);
     if (eventToEdit) {
+      console.log("TRAVEL DATE: ", travelDate);
       eventToEdit.needCarRefund = needCarRefund;
       eventToEdit.refundStartingCity = startingCity;
       eventToEdit.refundArrivalCity = arrivalCity;
@@ -110,6 +111,7 @@ const RefundKmScreen = ({ navigation, route }: any) => {
             <FormControl style={GlobalStyles.mt15} isRequired isInvalid={'travelDate' in validationErrors}>
               <FormControl.Label>Data della spesa</FormControl.Label>
               <Input
+                caretHidden={true}
                 placeholder="gg/mm/aaaa"
                 onPressIn={() => setShowDateTimePicker(true)}
                 value={travelDateString ? Utility.FormatDateDDMMYYYY(travelDateString) : ''}
@@ -123,21 +125,21 @@ const RefundKmScreen = ({ navigation, route }: any) => {
                   />
                 }
               />
+              {showDateTimePicker && (
+                <DateTimePicker
+                  mode="date"
+                  display="inline"
+                  locale="it-IT"
+                  value={travelDate ? travelDate : new Date()}
+                  onChange={(event, date) => {
+                    setShowDateTimePicker(false);
+                    setTravelDate(date as Date);
+                    setTravelDateString((date as Date)?.toString())
+                  }}
+                />
+              )}
               <FormErrorMessageComponent text='Campo obbligatorio' field='travelDate' validationArray={validationErrors} />
             </FormControl>
-
-            {showDateTimePicker && (
-              <DateTimePicker
-                mode="date"
-                display="spinner"
-                value={travelDate ? travelDate : new Date()}
-                onChange={(event, date) => {
-                  setShowDateTimePicker(false);
-                  setTravelDate(date as Date);
-                  setTravelDateString((date as Date)?.toString())
-                }}
-              />
-            )}
             <FormControl style={GlobalStyles.mt15} isRequired isInvalid={'refundForfait' in validationErrors}>
               <FormControl.Label>Importo rimborso forfetario (€)</FormControl.Label>
               <InputNumber defaultValue={event.travelRefundForfait} placeholder="es. 0.20" onChange={(e: any) => { console.log("Setting: ", e.nativeEvent.text); setRefundForfait(e.nativeEvent.text) }}></InputNumber>

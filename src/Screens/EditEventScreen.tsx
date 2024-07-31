@@ -18,10 +18,10 @@ const EditEventScreen = ({ navigation, route }: any) => {
   const [events, setEvents] = useState(dataContext.Events.getAllData())
   const [eventName, setEventName] = useState(event.name);
   const [eventDescription, setEventDescription] = useState(event.description);
-  const [showDateTimePicker, setShowDateTimePicker] = useState(false);
+  const [showStartDateTimePicker, setShowStartDateTimePicker] = useState(false);
+  const [showEndDateTimePicker, setShowEndDateTimePicker] = useState(false);
   const [eventStartDate, setEventStartDate] = useState(new Date(event.startDate));
   const [eventEndDate, setEventEndDate] = useState(new Date(event.endDate));
-  const [setDateFunction, setSetDateFunction] = useState('');
   const [mainCurrencyCode, setMainCurrencyCode] = useState('EUR');
   const [city, setCity] = useState(event.city)
   const [currenciesCodes, setCurrenciesCodes] = useState<string[]>([]);
@@ -88,7 +88,7 @@ const EditEventScreen = ({ navigation, route }: any) => {
     setValidationErrors(validationErrorsTemp);
     return isValid;
   }
-  
+
   return (
     <NativeBaseProvider>
       <ModalLoaderComponent isLoading={isLoading} text='Modifica evento in corso..' />
@@ -101,55 +101,67 @@ const EditEventScreen = ({ navigation, route }: any) => {
         <FormControl style={GlobalStyles.mt15} isRequired isInvalid={'eventStartDate' in validationErrors}>
           <FormControl.Label>Data di inizio dell'evento</FormControl.Label>
           <Input
+            caretHidden={true}
             placeholder="gg/mm/aaaa"
-            onPressIn={() => setShowDateTimePicker(true)}
+            onPressIn={() => setShowStartDateTimePicker(true)}
             value={Utility.FormatDateDDMMYYYY(eventStartDate.toString())}
             InputLeftElement={
               <InputSideButton
                 icon="calendar-day"
                 iconStyle={GlobalStyles.iconPrimary}
                 pressFunction={() => {
-                  setShowDateTimePicker(true);
-                  setSetDateFunction('setEventStartDate');
+                  setShowStartDateTimePicker(true);
                 }}
               />
             }
           />
+          {showStartDateTimePicker && (
+            <DateTimePicker
+              mode="date"
+              display="inline"
+              locale="it-IT"
+              value={eventStartDate}
+              style={{ alignSelf: 'flex-start' }}
+              onChange={(event, date) => {
+                setShowStartDateTimePicker(false);
+                setEventStartDate(date as Date);
+              }}
+            />
+          )}
           <FormErrorMessageComponent text={validationErrors.eventStartDate} field='eventStartDate' validationArray={validationErrors} />
         </FormControl>
 
         <FormControl style={GlobalStyles.mt15} isRequired isInvalid={'eventEndDate' in validationErrors}>
           <FormControl.Label>Data di fine dell'evento</FormControl.Label>
           <Input
+            caretHidden={true}
             placeholder="gg/mm/aaaa"
-            onPressIn={() => setShowDateTimePicker(true)}
+            onPressIn={() => setShowEndDateTimePicker(true)}
             value={Utility.FormatDateDDMMYYYY(eventEndDate.toString())}
             InputLeftElement={
               <InputSideButton
                 icon="calendar-day"
                 iconStyle={GlobalStyles.iconPrimary}
                 pressFunction={() => {
-                  setShowDateTimePicker(true);
-                  setSetDateFunction('setEventEndDate');
+                  setShowEndDateTimePicker(true);
                 }}
               />
             }
           />
+          {showEndDateTimePicker && (
+            <DateTimePicker
+              mode="date"
+              display="inline"
+              locale="it-IT"
+              value={eventEndDate}
+              onChange={(event, date) => {
+                setShowEndDateTimePicker(false);
+                setEventEndDate(date as Date);
+              }}
+            />
+          )}
           <FormErrorMessageComponent text={validationErrors.eventEndDate} field='eventEndDate' validationArray={validationErrors} />
         </FormControl>
-
-        {showDateTimePicker && (
-          <DateTimePicker
-            mode="date"
-            display="spinner"
-            value={new Date()}
-            onChange={(event, date) => {
-              setShowDateTimePicker(false);
-              const func = setDateFunction == 'setEventEndDate' ? setEventEndDate : setEventStartDate;
-              func(date as Date);
-            }}
-          />
-        )}
 
         <FormControl style={GlobalStyles.mt15} isRequired>
           <FormControl.Label>Destinazione (città)</FormControl.Label>

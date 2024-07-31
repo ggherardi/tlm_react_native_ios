@@ -44,14 +44,14 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
         useCustomHeaderWithButtonAsync(navigation, Utility.GetEventHeaderTitle(event), () => saveExpenseReport(), undefined, 'Crea nuova spesa', isFormValid, 'salva');
     });
 
-    const expenseItems = [        
+    const expenseItems = [
         "cena",
         "pagamento servizi per ospiti",
         "parcheggio",
         "pedaggi",
-        "pranzo",        
+        "pranzo",
         "taxi",
-        "ticket mezzi pubblici",                
+        "ticket mezzi pubblici",
         "altro"
     ];
 
@@ -179,7 +179,7 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
                 } else {
                     // GG: If there is no base64, it means that DocumentScanner was used, hence we need to resize the image first
                     let resizeOperation;
-                    try {                        
+                    try {
                         console.log(scannedImageToDelete.uri, event.directoryPath);
                         resizeOperation = await FileManager.resizeImage(scannedImageToDelete.uri, event.directoryPath, 800, 600);
                         console.log("Resize operation successful: ", resizeOperation);
@@ -193,18 +193,18 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
                         operationResult = await FileManager.moveFile(resizeOperation.path, photoFileFullPath);
                     }
                 }
-                if (operationResult) {                    
+                if (operationResult) {
                     const userProfile = Utility.GetUserProfile();
                     userProfile.swipeExpenseTutorialSeen = false;
                     dataContext.UserProfile.saveData([userProfile]);
-                    
+
                     expense.photoFilePath = photoFileFullPath;
                     expenses.push(expense);
-                                            
+
                     if (scannedImageToDelete) {
                         // GG: If we used DocumentScanner, we delete the original saved image from the pictures folder
                         await FileManager.deleteFileOrFolder(scannedImageToDelete.uri);
-                    }                    
+                    }
                     dataContext.ExpenseReports.saveData(expenses);
                     const allExpenses = dataContext.ExpenseReports.getAllData();
                     setExpenses(allExpenses);
@@ -293,6 +293,7 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
                         <FormControl style={GlobalStyles.mt15} isRequired isInvalid={'expenseDate' in validationErrors}>
                             <FormControl.Label>Data della spesa</FormControl.Label>
                             <Input
+                                caretHidden={true}
                                 placeholder="gg/mm/aaaa"
                                 onPressIn={() => setShowDateTimePicker(true)}
                                 value={expenseDate ? Utility.FormatDateDDMMYYYY(expenseDate.toString()) : ""}
@@ -306,20 +307,20 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
                                     />
                                 }
                             />
+                            {showDateTimePicker && (
+                                <DateTimePicker
+                                    mode="date"
+                                    display="inline"
+                                    locale="it-IT"
+                                    value={expenseDate ? expenseDate : new Date()}
+                                    onChange={(event, date) => {
+                                        setShowDateTimePicker(false);
+                                        setExpenseDate(date as Date);
+                                    }}
+                                />
+                            )}
                             <FormErrorMessageComponent text='Campo obbligatorio' field='expenseDate' validationArray={validationErrors} />
                         </FormControl>
-
-                        {showDateTimePicker && (
-                            <DateTimePicker
-                                mode="date"
-                                display="spinner"
-                                value={expenseDate ? expenseDate : new Date()}
-                                onChange={(event, date) => {
-                                    setShowDateTimePicker(false);
-                                    setExpenseDate(date as Date);
-                                }}
-                            />
-                        )}
                         <FormControl style={GlobalStyles.mt15} isRequired={expenseName == "altro"} isInvalid={'expenseDescription' in validationErrors}>
                             <FormControl.Label>Descrizione della spesa</FormControl.Label>
                             <TextArea placeholder="es. Taxi per trasferimento aeroporto" onChange={handleExpenseDescriptionChange} autoCompleteType={true} isInvalid={'expenseDescription' in validationErrors}></TextArea>

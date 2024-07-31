@@ -13,7 +13,6 @@ export const PDFBuilder = {
       const directory = `Documents`;
       console.log(`Creating pdf in directory: `, directory);
       const expenses = dataContext.ExpenseReports ? dataContext.ExpenseReports.getAllData() : []
-      console.log("HOW MANY EXPENSES!!!!!! ", dataContext.ExpenseReports);
       const options = {
         html: PDFBuilder.generateHtml(event, expenses),
         fileName: fileName,

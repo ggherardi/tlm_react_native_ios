@@ -27,7 +27,6 @@ const NewEventScreen = ({ navigation, route }: any) => {
   const [showEndDateTimePicker, setShowEndDateTimePicker] = useState(false);
   const [eventStartDate, setEventStartDate] = useState(new Date());
   const [eventEndDate, setEventEndDate] = useState(new Date());
-  const [setDateFunction, setSetDateFunction] = useState('');
   const [mainCurrencyCode, setMainCurrencyCode] = useState('EUR');
   const [city, setCity] = useState('')
   const [currenciesCodes, setCurrenciesCodes] = useState<string[]>([]);
@@ -112,7 +111,7 @@ const NewEventScreen = ({ navigation, route }: any) => {
       if (hasNotificationPermissions && Utility.GetNumberOfDaysBetweenDates(new Date().toString(), event.endDate) > 1) {
         console.log("Scheduling notifications for event..");
         BusinessEvent.scheduleNotifications(event);
-      }      
+      }
 
       userProfile.swipeTutorialSeen = false;
       dataContext.UserProfile.saveData([userProfile]);
@@ -173,6 +172,7 @@ const NewEventScreen = ({ navigation, route }: any) => {
         <FormControl style={GlobalStyles.mt15} isRequired isInvalid={'eventStartDate' in validationErrors}>
           <FormControl.Label>Data di inizio dell'evento</FormControl.Label>
           <Input
+            caretHidden={true}
             placeholder="gg/mm/aaaa"
             onPressIn={() => setShowStartDateTimePicker(true)}
             value={Utility.FormatDateDDMMYYYY(eventStartDate.toString())}
@@ -186,12 +186,26 @@ const NewEventScreen = ({ navigation, route }: any) => {
               />
             }
           />
+          {showStartDateTimePicker && (
+            <DateTimePicker
+              mode="date"
+              display="inline"
+              locale="it-IT"
+              value={eventStartDate}
+              style={{ alignSelf: 'flex-start' }}
+              onChange={(event, date) => {
+                setShowStartDateTimePicker(false);
+                setEventStartDate(date as Date);
+              }}
+            />
+          )}
           <FormErrorMessageComponent text={validationErrors.eventStartDate} field='eventStartDate' validationArray={validationErrors} />
         </FormControl>
 
-        <FormControl style={GlobalStyles.mt15} isRequired isInvalid={'eventEndDate' in validationErrors}>
+        <FormControl style={[GlobalStyles.mt15]} isRequired isInvalid={'eventEndDate' in validationErrors}>
           <FormControl.Label>Data di fine dell'evento</FormControl.Label>
           <Input
+            caretHidden={true}
             placeholder="gg/mm/aaaa"
             onPressIn={() => setShowEndDateTimePicker(true)}
             value={Utility.FormatDateDDMMYYYY(eventEndDate.toString())}
@@ -205,32 +219,20 @@ const NewEventScreen = ({ navigation, route }: any) => {
               />
             }
           />
+          {showEndDateTimePicker && (
+            <DateTimePicker
+              mode="date"
+              display="inline"
+              locale="it-IT"
+              value={eventEndDate}
+              onChange={(event, date) => {
+                setShowEndDateTimePicker(false);
+                setEventEndDate(date as Date);
+              }}
+            />
+          )}
           <FormErrorMessageComponent text={validationErrors.eventEndDate} field='eventEndDate' validationArray={validationErrors} />
         </FormControl>
-
-        {showStartDateTimePicker && (
-          <DateTimePicker
-            mode="date"
-            display="spinner"
-            value={eventStartDate}
-            onChange={(event, date) => {
-              setShowStartDateTimePicker(false);
-              setEventStartDate(date as Date);
-            }}
-          />
-        )}
-        {showEndDateTimePicker && (
-          <DateTimePicker
-            mode="date"
-            display="spinner"
-            value={eventEndDate}
-            onChange={(event, date) => {
-              setShowEndDateTimePicker(false);
-              setEventEndDate(date as Date);
-            }}
-          />
-        )}
-
         <FormControl style={GlobalStyles.mt15} isRequired>
           <FormControl.Label>Destinazione (città)</FormControl.Label>
           <Input placeholder="es. Roma" onChange={handleCityChange} isInvalid={'city' in validationErrors} maxLength={200} />
@@ -258,6 +260,9 @@ const multiSelectStyle = StyleSheet.create({
   },
   listContainer: {
     backgroundColor: "red"
+  },
+  dateContainer: {
+    display: 'flex'
   },
   selectToggle: {
     borderColor: '#d4d4d4',

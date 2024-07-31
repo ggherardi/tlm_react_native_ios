@@ -32,7 +32,7 @@ export class ExpenseReport extends BusinessDataTypeBase {
       expense.amount = travelledKmsRefund;
       expense.name = Constants.Generic.TravelRefundExpenseName;
       expense.description = '';
-      expense.date = new Date().toString();      
+      expense.date = event.travelDate;    
     }
     return expense;
   }

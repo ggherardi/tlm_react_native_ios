@@ -47,7 +47,6 @@ const AllEventsScreen = ({ navigation, route }: any) => {
   };
 
   Utility.OnFocus({ navigation: navigation, onFocusAction: refreshData });
-  
   return (
     <NativeBaseProvider>
       {events && events.length ? (
