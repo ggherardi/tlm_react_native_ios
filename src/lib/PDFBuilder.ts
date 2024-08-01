@@ -65,7 +65,7 @@ export const PDFBuilder = {
         }      
       </style>
       <div>            
-        <img src='${Images.tlm_logo.base_64}' width="150" />
+        <img src='${Images.tlm_logo.base_64}' width="300" />
         <h1 class="text-center mt-5">NOTA SPESE</h1>
         
         <div class="text-right pt-3">        
