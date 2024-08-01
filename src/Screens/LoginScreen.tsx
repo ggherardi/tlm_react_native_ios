@@ -71,7 +71,7 @@ const LoginScreen = ({ navigation, route }: any) => {
   return (
     <NativeBaseProvider>
       <View style={[styles.container]} onLayout={(e) => setAppHeight(e.nativeEvent.layout.height)}>
-        <Image source={Images.tlm_logo.rnSource} style={[styles.image]} />
+        <Image source={Images.tlm_logo_transparent.rnSource} style={[styles.image]} />
         <View>
           <FormControl style={GlobalStyles.mt15} isRequired isInvalid={"name" in validationErrors}>
             <LoginInputComponent defaultValue={name} placeholder='nome*' onChange={(e: any) => setName(e.nativeEvent.text)} borderColor={"name" in validationErrors ? 'red.500' : 'gray.300'} />
@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   image: {
-    width: 200,
+    width: 250,
     alignSelf: 'center',
     resizeMode: 'contain'
   },
