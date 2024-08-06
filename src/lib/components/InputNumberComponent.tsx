@@ -26,7 +26,7 @@ export const InputNumber = (config: IInputNumber) => {
     return (
         <Input
             placeholder={config.placeholder}
-            keyboardType='decimal-pad'
+            keyboardType='numbers-and-punctuation'
             onChange={validateNumber}
             isRequired={config.isRequired} 
             style={config.style}

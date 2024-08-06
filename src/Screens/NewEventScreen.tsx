@@ -173,6 +173,7 @@ const NewEventScreen = ({ navigation, route }: any) => {
           <FormControl.Label>Data di inizio dell'evento</FormControl.Label>
           <Input
             caretHidden={true}
+            showSoftInputOnFocus={false}
             placeholder="gg/mm/aaaa"
             onPressIn={() => setShowStartDateTimePicker(true)}
             value={Utility.FormatDateDDMMYYYY(eventStartDate.toString())}
@@ -207,6 +208,7 @@ const NewEventScreen = ({ navigation, route }: any) => {
           <FormControl.Label>Data di fine dell'evento</FormControl.Label>
           <Input
             caretHidden={true}
+            showSoftInputOnFocus={false}
             placeholder="gg/mm/aaaa"
             onPressIn={() => setShowEndDateTimePicker(true)}
             value={Utility.FormatDateDDMMYYYY(eventEndDate.toString())}

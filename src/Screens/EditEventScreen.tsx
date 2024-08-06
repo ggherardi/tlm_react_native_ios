@@ -103,6 +103,7 @@ const EditEventScreen = ({ navigation, route }: any) => {
           <Input
             caretHidden={true}
             placeholder="gg/mm/aaaa"
+            showSoftInputOnFocus={false}
             onPressIn={() => setShowStartDateTimePicker(true)}
             value={Utility.FormatDateDDMMYYYY(eventStartDate.toString())}
             InputLeftElement={
@@ -137,6 +138,7 @@ const EditEventScreen = ({ navigation, route }: any) => {
           <Input
             caretHidden={true}
             placeholder="gg/mm/aaaa"
+            showSoftInputOnFocus={false}
             onPressIn={() => setShowEndDateTimePicker(true)}
             value={Utility.FormatDateDDMMYYYY(eventEndDate.toString())}
             InputLeftElement={
