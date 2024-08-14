@@ -7,7 +7,6 @@ export const EmailManager = {
       subject: subject,
       recipients: to,
       body: body,
-      // attachments: attachments,
       attachments: attachments
     }, (error, event) => {
       console.log("Mail sent?", error, event);
