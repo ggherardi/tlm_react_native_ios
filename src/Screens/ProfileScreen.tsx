@@ -71,11 +71,11 @@ const ProfileScreen = ({ navigation, route }: any) => {
                     <Input defaultValue={surname} placeholder="es. Rossi" onChange={(e: any) => setSurname(e.nativeEvent.text)}></Input>
                     <FormErrorMessageComponent text='Campo obbligatorio' field='surname' validationArray={validationErrors} />
                 </FormControl>
-                <FormControl style={GlobalStyles.mt15} isRequired isInvalid={"email" in validationErrors}>
+                {/* <FormControl style={GlobalStyles.mt15} isRequired isInvalid={"email" in validationErrors}>
                     <FormControl.Label>Email</FormControl.Label>
                     <Input defaultValue={email} placeholder="es. tl@gmail.com" onChange={(e: any) => setEmail(e.nativeEvent.text)}></Input>
                     <FormErrorMessageComponent text='Campo obbligatorio' field='email' validationArray={validationErrors} />
-                </FormControl>
+                </FormControl> */}
             </ScrollView>
         </NativeBaseProvider>
     )

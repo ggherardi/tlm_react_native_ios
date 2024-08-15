@@ -13,7 +13,7 @@ import { fab } from '@fortawesome/free-brands-svg-icons'
 import { faSquareCheck } from '@fortawesome/free-solid-svg-icons/faSquareCheck'
 import { faBeerMugEmpty } from '@fortawesome/free-solid-svg-icons/faBeerMugEmpty'
 import { faCalendar } from '@fortawesome/free-solid-svg-icons/faCalendar'
-import { faArrowDown, faArrowDownLong, faArrowRotateLeft, faCalendarDay, faCalendarWeek, faCamera, faCameraRetro, faCarSide, faCheck, faCheckCircle, faChevronDown, faChevronLeft, faChevronRight, faChevronUp, faCircleInfo, faCircleNotch, faCog, faEnvelope, faExclamation, faExclamationCircle, faFileCirclePlus, faFilePdf, faFloppyDisk, faFolderPlus, faFolderTree, faHourglassEmpty, faHourglassEnd, faHourglassHalf, faHourglassStart, faImages, faPaperPlane, faPencil, faPlus, faSave, faSearch, faTable, faTableCells, faTableCellsLarge, faTableColumns, faTableList, faTableTennis, faTimeline, faTrash, faUpload, faUser, faWarning, faX, faXmarkCircle } from '@fortawesome/free-solid-svg-icons';
+import { faArrowDown, faArrowDownLong, faArrowRotateLeft, faCalendarDay, faCalendarWeek, faCamera, faCameraRetro, faCarSide, faCheck, faCheckCircle, faChevronDown, faChevronLeft, faChevronRight, faChevronUp, faCircleInfo, faCircleNotch, faCog, faEnvelope, faExclamation, faExclamationCircle, faFileCirclePlus, faFilePdf, faFloppyDisk, faFolderPlus, faFolderTree, faHourglassEmpty, faHourglassEnd, faHourglassHalf, faHourglassStart, faImages, faInfo, faPaperPlane, faPencil, faPlus, faSave, faSearch, faTable, faTableCells, faTableCellsLarge, faTableColumns, faTableList, faTableTennis, faTimeline, faTrash, faUpload, faUser, faWarning, faX, faXmarkCircle } from '@fortawesome/free-solid-svg-icons';
 import NewEventScreen from './src/Screens/NewEventScreen';
 import EventHomeScreen from './src/Screens/EventHomeScreen';
 import { ThemeColors } from './src/lib/GlobalStyles';
@@ -35,7 +35,7 @@ library.add(fab, faSquareCheck, faBeerMugEmpty, faCalendar, faCalendarDay, faTra
   faCheck, faSave, faFloppyDisk, faCog, faPaperPlane, faFilePdf, faUser, faPencil, faFolderPlus, faFolderTree,
   faArrowDown, faArrowDownLong, faFileCirclePlus, faCheckCircle, faXmarkCircle, faCircleInfo, faExclamationCircle,
   faCircle, faCircleNotch, faHourglassStart, faHourglassHalf, faHourglassEmpty, faHourglassEnd, faArrowRotateLeft,
-  faCameraRetro, faEnvelope, faCarSide, faImages, faWhatsapp)
+  faCameraRetro, faEnvelope, faCarSide, faImages, faWhatsapp, faInfo)
 
 // Android only
 // NotificationManager.createChannel(Constants.Channels.Reminder.id, Constants.Channels.Reminder.name);

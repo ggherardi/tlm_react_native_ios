@@ -9,6 +9,7 @@ import LoginInputComponent from '../lib/components/LoginInputComponent';
 import { Images } from '../assets/Images';
 import { Constants } from '../lib/Constants';
 import LoaderComponent, { LoaderSize } from '../lib/components/LoaderComponent';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 
 const LoginScreen = ({ navigation, route }: any) => {
   const [userProfile, setUserProfile] = useState<UserProfile>(Utility.GetUserProfile());
@@ -19,6 +20,7 @@ const LoginScreen = ({ navigation, route }: any) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
   const [validationErrors, setValidationErrors] = useState({});
+  const [showInfo, setShowInfo] = useState(false);
 
   useEffect(() => {
     if (userProfile && userProfile.name && userProfile.surname && userProfile.email) {
@@ -60,10 +62,10 @@ const LoginScreen = ({ navigation, route }: any) => {
       validationErrorsTemp = { ...validationErrorsTemp, surname: 'Campo obbligatorio' };
       isValid = false;
     }
-    if (!email) {
-      validationErrorsTemp = { ...validationErrorsTemp, email: 'Campo obbligatorio' };
-      isValid = false;
-    }
+    // if (!email) {
+    //   validationErrorsTemp = { ...validationErrorsTemp, email: 'Campo obbligatorio' };
+    //   isValid = false;
+    // }
     setValidationErrors(validationErrorsTemp);
     return isValid;
   }
@@ -73,18 +75,24 @@ const LoginScreen = ({ navigation, route }: any) => {
       <View style={[styles.container]} onLayout={(e) => setAppHeight(e.nativeEvent.layout.height)}>
         <Image source={Images.tlm_logo_transparent.rnSource} style={[styles.image]} />
         <View>
+          <Text style={[{ display: showInfo ? 'flex' : 'none' }, styles.descriptionText]}>Inserire nome e cognome che verranno visualizzati da TLM quando verrà inviata la nota spese. Sarà sempre possibile cambiarli dalle impostazioni.</Text>
           <FormControl style={GlobalStyles.mt15} isRequired isInvalid={"name" in validationErrors}>
             <LoginInputComponent defaultValue={name} placeholder='nome*' onChange={(e: any) => setName(e.nativeEvent.text)} borderColor={"name" in validationErrors ? 'red.500' : 'gray.300'} />
           </FormControl>
           <FormControl style={GlobalStyles.mt15} isRequired isInvalid={"surname" in validationErrors}>
             <LoginInputComponent defaultValue={surname} placeholder='cognome*' onChange={(e: any) => setSurname(e.nativeEvent.text)} borderColor={"surname" in validationErrors ? 'red.500' : 'gray.300'} />
           </FormControl>
-          <FormControl style={GlobalStyles.mt15} isRequired isInvalid={"email" in validationErrors}>
+          {/* <FormControl style={GlobalStyles.mt15} isRequired isInvalid={"email" in validationErrors}>
             <LoginInputComponent defaultValue={email} placeholder='email*' onChange={(e: any) => setEmail(e.nativeEvent.text)} keyboardType='email-address' borderColor={"email" in validationErrors ? 'red.500' : 'gray.300'} />
-          </FormControl>
-          <Pressable style={({ pressed }) => [{ opacity: pressed ? 0.2 : 1 }, styles.buttonContainer, GlobalStyles.mt15]} onPress={() => login()}>
-            <Text style={[styles.buttonText]}>{isLoading ? (<LoaderComponent color={ThemeColors.white} size={LoaderSize.small} />) : ('ACCEDI')}</Text>
-          </Pressable>
+          </FormControl> */}
+          <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', gap: 10 }}>
+            <Pressable style={({ pressed }) => [{ opacity: pressed ? 0.2 : 1, flex: 1 }, styles.buttonContainer, GlobalStyles.mt15]} onPress={() => setShowInfo(!showInfo)}>
+            <FontAwesomeIcon style={{ color: 'white', alignSelf: 'center' }} icon={'info'} />
+            </Pressable>
+            <Pressable style={({ pressed }) => [{ opacity: pressed ? 0.2 : 1, flex: 6 }, styles.buttonContainer, GlobalStyles.mt15]} onPress={() => login()}>
+              <Text style={[styles.buttonText]}>{isLoading ? (<LoaderComponent color={ThemeColors.white} size={LoaderSize.small} />) : ('SALVA')}</Text>
+            </Pressable>
+          </View>
         </View>
       </View>
     </NativeBaseProvider>
@@ -98,6 +106,10 @@ const styles = StyleSheet.create({
     flex: 1,
     height: '100%',
     justifyContent: 'center'
+  },
+  descriptionText: {
+    textAlign: 'center',
+    color: ThemeColors.primary
   },
   image: {
     width: 250,
