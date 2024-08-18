@@ -23,7 +23,7 @@ const LoginScreen = ({ navigation, route }: any) => {
   const [showInfo, setShowInfo] = useState(false);
 
   useEffect(() => {
-    if (userProfile && userProfile.name && userProfile.surname && userProfile.email) {
+    if (userProfile && userProfile.name && userProfile.surname) {
       setIsLoading(true);
       Utility.ShowSuccessMessage(`Bentornato, ${userProfile.name}`);
       navigation.replace(Constants.Navigation.Home);
@@ -43,7 +43,7 @@ const LoginScreen = ({ navigation, route }: any) => {
     const profile = new UserProfile();
     profile.name = name ? name.trim() : '';
     profile.surname = surname ? surname.trim() : '';
-    profile.email = email ? email.trim() : '';
+    profile.email = email ? email.trim() : 'info@tourleadermanagement.ch';
     dataContext.UserProfile.saveData([profile]);
     Utility.ShowSuccessMessage(`Bentornato, ${profile.name}`);
     navigation.replace(Constants.Navigation.Home);

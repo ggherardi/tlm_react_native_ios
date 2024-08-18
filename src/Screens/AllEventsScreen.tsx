@@ -52,12 +52,12 @@ const AllEventsScreen = ({ navigation, route }: any) => {
     <NativeBaseProvider>
       {events && events.length ? (
         <ScrollView contentContainerStyle={[GlobalStyles.container]}>
-          <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+          {/* <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
             <Text style={{ paddingBottom: 10, paddingLeft: 10, fontSize: 13, alignSelf: 'center', verticalAlign: 'middle', fontWeight: 'bold' }}>Se non hai sostenuto spese, avvisa comunque TLM</Text>
             <View>
               <InputSideButton icon={faWhatsapp} iconColor='#25D366' pressFunction={() => LinkHelper.OpenWhatsapp()} />
             </View>
-          </View>
+          </View> */}
           <View>
               {/* <InputSideButton icon={faTelegram} text='Get notifications' pressFunction={() => FileManager.ls(events[0].directoryPath.substring(0, events[0].directoryPath.lastIndexOf("/")))}></InputSideButton> */}
               {/* <InputSideButton icon={faTelegram} text='Get notifications' pressFunction={() => FileManager.ls("/var/mobile/Containers/Data/Application/CD9D71E4-B66E-4ABD-8EB8-D87C732ED8DA/Documents/Evento_31-07-2024_31-08-2024_411034f4928e421c8842e60bf2fb1d40/")}></InputSideButton> */}

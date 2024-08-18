@@ -12,7 +12,7 @@ const ProfileScreen = ({ navigation, route }: any) => {
     const [userProfile, setUserProfile] = useState<UserProfile>(Utility.GetUserProfile());
     const [name, setName] = useState(userProfile.name);
     const [surname, setSurname] = useState(userProfile.surname);
-    const [email, setEmail] = useState(userProfile.email);
+    const [email, setEmail] = useState(userProfile.email ? userProfile.email : "info@tourleadermanagement.ch");
     const [validationErrors, setValidationErrors] = useState({});
 
     useEffect(() => {
@@ -71,11 +71,11 @@ const ProfileScreen = ({ navigation, route }: any) => {
                     <Input defaultValue={surname} placeholder="es. Rossi" onChange={(e: any) => setSurname(e.nativeEvent.text)}></Input>
                     <FormErrorMessageComponent text='Campo obbligatorio' field='surname' validationArray={validationErrors} />
                 </FormControl>
-                {/* <FormControl style={GlobalStyles.mt15} isRequired isInvalid={"email" in validationErrors}>
-                    <FormControl.Label>Email</FormControl.Label>
-                    <Input defaultValue={email} placeholder="es. tl@gmail.com" onChange={(e: any) => setEmail(e.nativeEvent.text)}></Input>
+                <FormControl style={GlobalStyles.mt15} isRequired isInvalid={"email" in validationErrors}>
+                    <FormControl.Label>Email azienda (per invio nota spesa)</FormControl.Label>
+                    <Input keyboardType='email-address' defaultValue={email} placeholder="es. tl@gmail.com" onChange={(e: any) => setEmail(e.nativeEvent.text)}></Input>
                     <FormErrorMessageComponent text='Campo obbligatorio' field='email' validationArray={validationErrors} />
-                </FormControl> */}
+                </FormControl>
             </ScrollView>
         </NativeBaseProvider>
     )
