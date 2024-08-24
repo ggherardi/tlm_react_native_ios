@@ -1,5 +1,5 @@
 import { FormControl, Input, NativeBaseProvider, ScrollView } from 'native-base';
-import React, { StyleSheet } from 'react-native';
+import React, { Keyboard, StyleSheet } from 'react-native';
 import GlobalStyles from '../lib/GlobalStyles';
 import { Utility } from '../lib/Utility';
 import { useCustomHeaderWithButtonAsync } from '../lib/components/CustomHeaderComponent';
@@ -31,6 +31,7 @@ const ProfileScreen = ({ navigation, route }: any) => {
         setUserProfile(profile);
         console.log("AH, ", profile);
         Utility.ShowSuccessMessage("Profilo aggiornato correttamente");
+        Keyboard.dismiss();
     };
 
     const validate = (): boolean => {

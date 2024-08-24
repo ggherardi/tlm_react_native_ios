@@ -1,7 +1,7 @@
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { FormControl, Input, NativeBaseProvider, TextArea } from 'native-base';
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, ScrollView, Alert } from 'react-native';
+import { FormControl, Input, KeyboardAvoidingView, NativeBaseProvider, TextArea } from 'native-base';
+import React, { useEffect, useRef, useState } from 'react';
+import { StyleSheet, ScrollView, Alert, Platform } from 'react-native';
 import { InputSideButton } from '../lib/components/InputSideButtonComponent';
 import GlobalStyles from '../lib/GlobalStyles';
 import { BusinessEvent } from '../lib/models/BusinessEvent';
@@ -34,6 +34,7 @@ const NewEventScreen = ({ navigation, route }: any) => {
   const [isFormValid, setIsFormValid] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [validationErrors, setValidationErrors] = useState<any>({});
+  const scrollViewRef = useRef<ScrollView>(null);
 
   useEffect(() => {
     useCustomHeaderWithButtonAsync(navigation, "Crea nuovo evento", () => saveEvent(), undefined, undefined, isFormValid, 'salva');
@@ -159,102 +160,110 @@ const NewEventScreen = ({ navigation, route }: any) => {
     setEvents(dataContext.Events.getAllData());
   }
 
+  const scrollToY = () => {
+    setTimeout(() => {
+      scrollViewRef.current?.scrollToEnd();
+    }, 100);
+  }
+
   Utility.OnFocus({ navigation: navigation, onFocusAction: refreshData });
 
   return (
     <NativeBaseProvider>
       <ModalLoaderComponent isLoading={isLoading} text='Creazione evento in corso..' />
-      <ScrollView contentContainerStyle={styles.container}>
-        <FormControl style={GlobalStyles.mt15} isRequired isInvalid={'eventName' in validationErrors}>
-          <FormControl.Label>Nome dell'evento</FormControl.Label>
-          <Input placeholder="Nome evento" onChange={handleEventNameChange} maxLength={50}></Input>
-          <FormErrorMessageComponent text='Campo obbligatorio' field='eventName' validationArray={validationErrors} />
-        </FormControl>
+      <KeyboardAvoidingView behavior={Platform.OS == 'ios' ? 'padding' : 'height'} keyboardVerticalOffset={100}>
+        <ScrollView contentContainerStyle={styles.container} ref={scrollViewRef}>
+          <FormControl style={GlobalStyles.mt15} isRequired isInvalid={'eventName' in validationErrors}>
+            <FormControl.Label>Nome dell'evento</FormControl.Label>
+            <Input placeholder="Nome evento" onChange={handleEventNameChange} maxLength={50}></Input>
+            <FormErrorMessageComponent text='Campo obbligatorio' field='eventName' validationArray={validationErrors} />
+          </FormControl>
 
-        <FormControl style={GlobalStyles.mt15} isRequired isInvalid={'eventStartDate' in validationErrors}>
-          <FormControl.Label>Data di inizio dell'evento</FormControl.Label>
-          <Input
-            caretHidden={true}
-            showSoftInputOnFocus={false}
-            placeholder="gg/mm/aaaa"
-            onPressIn={() => setShowStartDateTimePicker(true)}
-            value={Utility.FormatDateDDMMYYYY(eventStartDate.toString())}
-            InputLeftElement={
-              <InputSideButton
-                icon="calendar-day"
-                iconStyle={GlobalStyles.iconPrimary}
-                pressFunction={() => {
-                  setShowStartDateTimePicker(true);
+          <FormControl style={GlobalStyles.mt15} isRequired isInvalid={'eventStartDate' in validationErrors}>
+            <FormControl.Label>Data di inizio dell'evento</FormControl.Label>
+            <Input
+              caretHidden={true}
+              showSoftInputOnFocus={false}
+              placeholder="gg/mm/aaaa"
+              onPressIn={() => setShowStartDateTimePicker(true)}
+              value={Utility.FormatDateDDMMYYYY(eventStartDate.toString())}
+              InputLeftElement={
+                <InputSideButton
+                  icon="calendar-day"
+                  iconStyle={GlobalStyles.iconPrimary}
+                  pressFunction={() => {
+                    setShowStartDateTimePicker(true);
+                  }}
+                />
+              }
+            />
+            {showStartDateTimePicker && (
+              <DateTimePicker
+                mode="date"
+                themeVariant='light'
+                display="inline"
+                locale="it-IT"
+                value={eventStartDate}
+                style={{ alignSelf: 'flex-start' }}
+                onChange={(event, date) => {
+                  setShowStartDateTimePicker(false);
+                  setEventStartDate(date as Date);
                 }}
               />
-            }
-          />
-          {showStartDateTimePicker && (
-            <DateTimePicker
-              mode="date"
-              themeVariant='light'
-              display="inline"
-              locale="it-IT"
-              value={eventStartDate}
-              style={{ alignSelf: 'flex-start' }}
-              onChange={(event, date) => {
-                setShowStartDateTimePicker(false);
-                setEventStartDate(date as Date);
-              }}
-            />
-          )}
-          <FormErrorMessageComponent text={validationErrors.eventStartDate} field='eventStartDate' validationArray={validationErrors} />
-        </FormControl>
+            )}
+            <FormErrorMessageComponent text={validationErrors.eventStartDate} field='eventStartDate' validationArray={validationErrors} />
+          </FormControl>
 
-        <FormControl style={[GlobalStyles.mt15]} isRequired isInvalid={'eventEndDate' in validationErrors}>
-          <FormControl.Label>Data di fine dell'evento</FormControl.Label>
-          <Input
-            caretHidden={true}
-            showSoftInputOnFocus={false}
-            placeholder="gg/mm/aaaa"
-            onPressIn={() => setShowEndDateTimePicker(true)}
-            value={Utility.FormatDateDDMMYYYY(eventEndDate.toString())}
-            InputLeftElement={
-              <InputSideButton
-                icon="calendar-day"
-                iconStyle={GlobalStyles.iconPrimary}
-                pressFunction={() => {
-                  setShowEndDateTimePicker(true);
+          <FormControl style={[GlobalStyles.mt15]} isRequired isInvalid={'eventEndDate' in validationErrors}>
+            <FormControl.Label>Data di fine dell'evento</FormControl.Label>
+            <Input
+              caretHidden={true}
+              showSoftInputOnFocus={false}
+              placeholder="gg/mm/aaaa"
+              onPressIn={() => setShowEndDateTimePicker(true)}
+              value={Utility.FormatDateDDMMYYYY(eventEndDate.toString())}
+              InputLeftElement={
+                <InputSideButton
+                  icon="calendar-day"
+                  iconStyle={GlobalStyles.iconPrimary}
+                  pressFunction={() => {
+                    setShowEndDateTimePicker(true);
+                  }}
+                />
+              }
+            />
+            {showEndDateTimePicker && (
+              <DateTimePicker
+                mode="date"
+                themeVariant='light'
+                display="inline"
+                locale="it-IT"
+                value={eventEndDate}
+                onChange={(event, date) => {
+                  setShowEndDateTimePicker(false);
+                  setEventEndDate(date as Date);
                 }}
               />
-            }
-          />
-          {showEndDateTimePicker && (
-            <DateTimePicker
-              mode="date"
-              themeVariant='light'
-              display="inline"
-              locale="it-IT"
-              value={eventEndDate}
-              onChange={(event, date) => {
-                setShowEndDateTimePicker(false);
-                setEventEndDate(date as Date);
-              }}
-            />
-          )}
-          <FormErrorMessageComponent text={validationErrors.eventEndDate} field='eventEndDate' validationArray={validationErrors} />
-        </FormControl>
-        <FormControl style={GlobalStyles.mt15} isRequired>
-          <FormControl.Label>Destinazione (città)</FormControl.Label>
-          <Input placeholder="es. Roma" onChange={handleCityChange} isInvalid={'city' in validationErrors} maxLength={200} />
-          <FormErrorMessageComponent text='Campo obbligatorio' field='city' validationArray={validationErrors} />
-        </FormControl>
+            )}
+            <FormErrorMessageComponent text={validationErrors.eventEndDate} field='eventEndDate' validationArray={validationErrors} />
+          </FormControl>
+          <FormControl style={GlobalStyles.mt15} isRequired>
+            <FormControl.Label>Destinazione (città)</FormControl.Label>
+            <Input placeholder="es. Roma" onChange={handleCityChange} isInvalid={'city' in validationErrors} maxLength={200} />
+            <FormErrorMessageComponent text='Campo obbligatorio' field='city' validationArray={validationErrors} />
+          </FormControl>
 
-        <FormControl style={GlobalStyles.mt15}>
-          <FormControl.Label>Fondo cassa (€)</FormControl.Label>
-          <InputNumber placeholder='es. 10.5' onChange={handleCashFundChange} isRequired={true} />
-        </FormControl>
+          <FormControl style={GlobalStyles.mt15}>
+            <FormControl.Label>Fondo cassa (€)</FormControl.Label>
+            <InputNumber placeholder='es. 10.5' onChange={handleCashFundChange} isRequired={true} />
+          </FormControl>
 
-        <FormControl style={GlobalStyles.mt15}>
-          <FormControl.Label>Descrizione dell'evento</FormControl.Label>
-          <TextArea placeholder="Descrizione breve dell'evento" onChange={handleEventDescriptionChange} autoCompleteType={true}></TextArea>
-        </FormControl>
-      </ScrollView>
+          <FormControl style={GlobalStyles.mt15}>
+            <FormControl.Label>Descrizione dell'evento</FormControl.Label>
+            <TextArea placeholder="Descrizione breve dell'evento" onChange={handleEventDescriptionChange} autoCompleteType={true} onFocus={scrollToY}></TextArea>
+          </FormControl>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </NativeBaseProvider>
   );
 };
