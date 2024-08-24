@@ -172,10 +172,11 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
                 expense.date = (expenseDate as Date).toString();
                 expense.timeStamp = new Date().toString();
                 const photoFileName = `${Utility.SanitizeString(event.name)}-${Utility.SanitizeString(expense.name)}-${Utility.FormatDateDDMMYYYY(expense.date, '-')}-${Utility.GenerateRandomGuid("")}.${Utility.GetExtensionFromType(photo.type)}`;
-                const photoFileFullPath = `${event.directoryPath}/${photoFileName}`;
+                const photoLeafFilePath = `${event.directoryPath}/${photoFileName}`;
+                const photoFullFilePath = `${await FileManager.getDocumentDir()}/${photoLeafFilePath}`;
                 let operationResult;
                 if (photo.base64) {
-                    operationResult = await FileManager.saveFromBase64(photoFileFullPath, photo.base64);
+                    operationResult = await FileManager.saveFromBase64(photoFullFilePath, photo.base64);
                 } else {
                     // GG: If there is no base64, it means that DocumentScanner was used, hence we need to resize the image first
                     let resizeOperation;
@@ -190,8 +191,8 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
                     }
                     // GG: If the resize was successful, we now need to move the resized image to the event folder while renaming it
                     if (resizeOperation) {
-                        console.log("Moving and renaming image from resizeOperation.path: ", resizeOperation.path, " to photoFileFullPath: ", photoFileFullPath);
-                        operationResult = await FileManager.moveFile(resizeOperation.path, photoFileFullPath);
+                        console.log("Moving and renaming image from resizeOperation.path: ", resizeOperation.path, " to photoFileFullPath: ", photoFullFilePath);
+                        operationResult = await FileManager.moveFile(resizeOperation.path, photoFullFilePath);
                     }
                 }
                 if (operationResult) {
@@ -199,7 +200,7 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
                     userProfile.swipeExpenseTutorialSeen = false;
                     dataContext.UserProfile.saveData([userProfile]);
 
-                    expense.photoFilePath = photoFileFullPath;
+                    expense.photoFilePath = photoLeafFilePath;
                     expenses.push(expense);
 
                     if (scannedImageToDelete) {

@@ -13,7 +13,7 @@ export const PDFBuilder = {
     return new Promise(async (resolve, reject) => {
       const directory = `Documents`;
       console.log(`Creating pdf in directory: `, directory);
-      const expenses = dataContext.ExpenseReports ? dataContext.ExpenseReports.getAllData() : []
+      const expenses = Utility.GetExpensesForEvent(event);
       const generatedHtml = await PDFBuilder.generateHtml(event, expenses);
       const options = {
         html: generatedHtml,
@@ -33,6 +33,7 @@ export const PDFBuilder = {
 
   generateHtml: async (event: BusinessEvent, expenses: ExpenseReport[]): Promise<string> => {
     return new Promise<string>(async (resolve, reject) => {
+      const documentDir = await FileManager.getDocumentDir();
       const userProfile = Utility.GetUserProfile();
       let travelledKmsRefund = 0;
       const refundExpense = ExpenseReport.generateKmRefund(event);
@@ -186,10 +187,11 @@ export const PDFBuilder = {
       }
       for (let i = 0; i < expenses.length; i++) {
         const expense = expenses[i];
-        const encodedImage = await FileManager.encodeBase64(expense.photoFilePath)
+        const photoFilePath = `${documentDir}/${expense.photoFilePath}`;
+        const encodedImage = await FileManager.encodeBase64(photoFilePath);
         const isEven = i % 2 == 0;
         const shouldPageBreak = i % 4 == 0;
-        console.log(`Expense with amount: ${expense.amount} has picture in location: ${expense.photoFilePath} and encoding is: ${encodedImage}`)
+        console.log(`Expense with amount: ${expense.amount} has picture in location: ${photoFilePath} and encoding is: ${encodedImage}`)
         html += shouldPageBreak ? `
         <div class="pagebreak"></div>` : ``;
         html += isEven ? `

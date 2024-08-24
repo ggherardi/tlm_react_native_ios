@@ -1,6 +1,6 @@
 import { PermissionsAndroid, Platform } from 'react-native';
 // import RNFetchBlob from 'rn-fetch-blob';
-import ReactNativeBlobUtil from 'react-native-blob-util';
+import ReactNativeBlobUtil, { ReactNativeBlobUtilStat } from 'react-native-blob-util';
 import { PromiseResult } from './models/PromiseResult';
 import ImageResizer, { Response } from '@bam.tech/react-native-image-resizer';
 
@@ -129,9 +129,34 @@ export const FileManager = {
     });
   },
 
-  ls: async (path: string) => {
-    console.log("listing..");
-    const ls = await ReactNativeBlobUtil.fs.lstat(path);
-    console.log(ls);
-  }
+  getDocumentDir: async (): Promise<string> => {
+    return new Promise (async (resolve, reject) => {
+      const dirStat = await ReactNativeBlobUtil.fs.stat(ReactNativeBlobUtil.fs.dirs.DocumentDir);
+      if (dirStat) {
+        resolve (dirStat.path);
+      } else {
+        reject ();
+      }
+    })
+  },
+
+  ls: async (path: string): Promise<ReactNativeBlobUtilStat[]> => {
+    return new Promise(async (resolve, reject) => {
+      const ls = await ReactNativeBlobUtil.fs.lstat(path);
+      if (ls) {
+        resolve (ls);
+      }
+      reject();
+    })
+  },
+
+  stat: async (path: string): Promise<ReactNativeBlobUtilStat> => {
+    return new Promise(async (resolve, reject) => {
+      const stat: ReactNativeBlobUtilStat = await ReactNativeBlobUtil.fs.stat(ReactNativeBlobUtil.fs.dirs.DocumentDir)
+      if (stat) {
+        resolve (stat);
+      }
+      reject();
+    })
+  },
 }

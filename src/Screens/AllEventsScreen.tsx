@@ -1,6 +1,6 @@
 import { Input, NativeBaseProvider } from 'native-base';
 import React, { useState, useEffect } from 'react';
-import { Text, ScrollView, Alert, View, StyleSheet, Dimensions, Image } from 'react-native';
+import { Text, ScrollView, Alert, View, StyleSheet, Dimensions, Image, Pressable } from 'react-native';
 import GlobalStyles from '../lib/GlobalStyles';
 import { BusinessEvent } from '../lib/models/BusinessEvent';
 import { HomeDataRowComponent } from '../lib/components/HomeDataRowComponent';
@@ -46,6 +46,10 @@ const AllEventsScreen = ({ navigation, route }: any) => {
       { text: "Annulla", style: "cancel" }
     ]);
   };
+
+  const goToDebug = () => {
+    navigation.navigate()
+  }
 
   Utility.OnFocus({ navigation: navigation, onFocusAction: refreshData });
   return (

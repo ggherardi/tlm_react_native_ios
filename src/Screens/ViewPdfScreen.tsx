@@ -36,7 +36,8 @@ const ViewPdfScreen = ({ navigation, route }: any) => {
     if (userProfileAllData && userProfileAllData.length) {
       userProfile = userProfileAllData[0];
     }
-    attachments.push(new Attachment(`nota_spese_${event.name}_${Utility.GetYear(event.startDate)}_${userProfile.surname}_${userProfile.name}`, event.pdfFullFilePath, event.pdfFullFilePath, 'pdf'));
+    const pdfFullFilePath = `${route.params.documentPath}/${event.pdfFullFilePath}`
+    attachments.push(new Attachment(`nota_spese_${event.name}_${Utility.GetYear(event.startDate)}_${userProfile.surname}_${userProfile.name}`, pdfFullFilePath, pdfFullFilePath, 'pdf'));
     const subject = `Nota spese ${event.city} ${event.name} ${Utility.FormatDateDDMMYYYY(event.startDate)} - ${Utility.FormatDateDDMMYYYY(event.endDate)} ${userProfile.surname} ${userProfile.name}`;
     EmailManager.send([userProfile.email], subject, "Mail inviata dall'app", attachments);
     // EmailManager.send(["info@tourleadermanagement.ch", "giamalfred@gmail.com"], subject, "Mail inviata dall'app", attachments);
@@ -44,7 +45,8 @@ const ViewPdfScreen = ({ navigation, route }: any) => {
     // EmailManager.send(["giamalfred@gmail.com"], subject, `Mail inviata dall'APP "Nota spese TLM"`, attachments);
   }
   console.log(`PDF Location: file:///${event.pdfFullFilePath}`);
-  const [pdfSource, setPdfSource] = useState<any>({ uri: `file:///${event.pdfFullFilePath}`, cache: true });
+
+  const [pdfSource, setPdfSource] = useState<any>({ uri: `file:///${route.params.documentPath}/${event.pdfFullFilePath}`, cache: true });
 
   return (
     <NativeBaseProvider>

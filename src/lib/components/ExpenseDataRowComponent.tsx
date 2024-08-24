@@ -8,6 +8,7 @@ import dataContext from '../models/DataContext';
 import GlobalStyles, { ThemeColors } from '../GlobalStyles';
 import { BusinessEvent } from '../models/BusinessEvent';
 import { renderRightAction } from './SwipableActionsComponent';
+import { FileManager } from '../FileManager';
 
 interface IExpenseDataRow {
     expense: ExpenseReport;
@@ -18,13 +19,21 @@ interface IExpenseDataRow {
 }
 
 export const ExpenseDataRowComponent = ({ expense: expense, event, onDelete, index, navigation }: IExpenseDataRow) => {
+    const [imageUri, setImageUri] = useState<string>();
+
     const goToExpense = () => {
         // navigation.navigate(Constants.Navigation.EventHome, { expense: expense });
     };
     const swipableRef = useRef<Swipeable>(null);
 
+    const getDocumentDir = async () => {
+        const documentDir = await FileManager.getDocumentDir();
+        setImageUri(`${documentDir}/${expense.photoFilePath}`);
+    }
+
     useEffect(() => {
         const userProfile = Utility.GetUserProfile();
+        getDocumentDir();
         if (!userProfile.swipeExpenseTutorialSeen && index == 0) {
             console.log("hinting");
             setTimeout(() => Utility.SwipableHint(swipableRef), 400);
@@ -52,7 +61,7 @@ export const ExpenseDataRowComponent = ({ expense: expense, event, onDelete, ind
         ]);
     };
 
-    const imageUri = `${expense.photoFilePath}`;
+    console.log("imageUri: ", imageUri);
 
     return (
         <GestureHandlerRootView>
@@ -64,7 +73,7 @@ export const ExpenseDataRowComponent = ({ expense: expense, event, onDelete, ind
                     </Row>
                     <Row style={[GlobalStyles.pt5]}>
                         <View style={[styles.expenseImageContainer]}>
-                            {Utility.IsNotNullOrUndefined(expense.photoFilePath) && (
+                            {Utility.IsNotNullOrUndefined(expense.photoFilePath) && Utility.IsNotNullOrUndefined(imageUri) && (
                                 <Image alt='noimage' source={{ uri: imageUri }} style={[styles.image]} />
                             )}
                         </View>

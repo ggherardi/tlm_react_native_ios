@@ -46,8 +46,8 @@ export class BusinessEvent extends BusinessDataTypeBase {
     return element.id == id;
   }
 
-  static extraDeleteSteps(element: BusinessEvent): void {
-    FileManager.deleteFileOrFolder(element.directoryPath);
+  static async extraDeleteSteps(element: BusinessEvent): Promise<void> {
+    FileManager.deleteFileOrFolder(`${await FileManager.getDocumentDir()}/${element.directoryPath}`);
     NotificationManager.cancelAllScheduledNotifications(element.notificationIds);
   }
 

@@ -92,17 +92,19 @@ const NewEventScreen = ({ navigation, route }: any) => {
     const directoryName = `${sanitizedEventName}_${Utility.FormatDateDDMMYYYY(event.startDate, "-")}_${Utility.FormatDateDDMMYYYY(event.endDate, "-")}_${Utility.GenerateRandomGuid("")}`;
     const directory = await FileManager.createFolder(directoryName);
     console.log("Created directory: ", directory);
+    const directoryPathLeaf = directory.substring(directory.lastIndexOf("/"), directory.length);
     const pdfFullFilePath = `${directory}/${pdfFileName}.pdf`;
-    console.log("Creating event pdf..");
+    const pdfLeafFilePath = `${directoryPathLeaf}/${pdfFileName}.pdf`;
+    console.log(`Directory Path Leaf: (${directoryPathLeaf})`);
+    console.log(`Creating event pdf.. (${pdfLeafFilePath})`);
     const createdFile = await PDFBuilder.createExpensesPdfAsync(event, pdfFileName);
     event.reportFileName = pdfFileName;
     if (createdFile) {
       const createdFilePath = createdFile.filePath as string;
       const moved = await FileManager.moveFile(createdFilePath, pdfFullFilePath);
       if (moved) {
-        event.directoryName = directory;
-        event.pdfFullFilePath = pdfFullFilePath;
-        event.directoryPath = directory;
+        event.pdfFullFilePath = pdfLeafFilePath;
+        event.directoryPath = directoryPathLeaf;
         console.log("Saving all events to memory..");
         dataContext.Events.saveData(events);
         Utility.ShowSuccessMessage("Evento creato correttamente");

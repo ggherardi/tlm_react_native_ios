@@ -11,13 +11,17 @@ import { NavigationFakeButtonComponent } from '../lib/components/NavigationFakeB
 import { useEffect } from 'react';
 import NavigationHelper from '../lib/NavigationHelper';
 import { FileManager } from '../lib/FileManager';
+import DebugScreen from './DebugScreen';
+import { Utility } from '../lib/Utility';
 
 const Tab = createBottomTabNavigator();
 
 const HomeScreen = ({ navigation, route }: any) => {
-    useEffect(() => {        
-        NavigationHelper.setHomeBaseNavigation(navigation);                
-        const checkPermissions = async() => {
+    const userProfile = Utility.GetUserProfile();
+
+    useEffect(() => {
+        NavigationHelper.setHomeBaseNavigation(navigation);
+        const checkPermissions = async () => {
             try {
                 const result = await FileManager.checkStoragePermissions();
                 if (result.success) {
@@ -27,7 +31,7 @@ const HomeScreen = ({ navigation, route }: any) => {
                 }
             } catch (err) {
                 console.log("Permissions exception in home screen", err);
-            }           
+            }
         }
         checkPermissions();
     }, []);
@@ -35,42 +39,50 @@ const HomeScreen = ({ navigation, route }: any) => {
     const commonTabOptions: BottomTabNavigationOptions = {
         lazy: true,
         headerShown: false,
-    }    
+    }
 
     // @ts-ignore
-    const newEventTabOptions = ({ navigation }) => ({        
-        tabBarButton: () => <NavigationFakeButtonComponent icon={'folder-plus'} pressFunction={() => { navigation.getParent().navigate(Constants.Navigation.NewEvent)}} />
+    const newEventTabOptions = ({ navigation }) => ({
+        tabBarButton: () => <NavigationFakeButtonComponent icon={'folder-plus'} pressFunction={() => { navigation.getParent().navigate(Constants.Navigation.NewEvent) }} />
     });
-    
+
     return (
         <Tab.Navigator
-        screenOptions={({ route }) => ({ tabBarIcon: ({ focused, color, size }) => {
-                let tabIcon: IconProp = "trash";
-                switch (route.name) {
-                    case Constants.Navigation.AllEvents:
-                        tabIcon = "folder-tree"
-                    break;
-                    case Constants.Navigation.UserProfile:
-                        tabIcon = "user";
-                    break;
-                }
-                return <FontAwesomeIcon icon={tabIcon} color={focused ? ThemeColors.primary : ThemeColors.inactive} />
-            },            
-            tabBarActiveTintColor: ThemeColors.primary,
-            tabBarInactiveTintColor: 'gray',
-        })}>
+            screenOptions={({ route }) => ({
+                tabBarIcon: ({ focused, color, size }) => {
+                    let tabIcon: IconProp = "trash";
+                    switch (route.name) {
+                        case Constants.Navigation.AllEvents:
+                            tabIcon = "folder-tree"
+                            break;
+                        case Constants.Navigation.UserProfile:
+                            tabIcon = "user";
+                            break;
+                    }
+                    return <FontAwesomeIcon icon={tabIcon} color={focused ? ThemeColors.primary : ThemeColors.inactive} />
+                },
+                tabBarActiveTintColor: ThemeColors.primary,
+                tabBarInactiveTintColor: 'gray',
+            })}>
             <Tab.Screen
                 name={"Tutti gli eventi"}
                 component={AllEventsScreen}
                 options={commonTabOptions}></Tab.Screen>
-            <Tab.Screen             
-                name={Constants.Navigation.NewEvent} 
+            <Tab.Screen
+                name={Constants.Navigation.NewEvent}
                 component={PlaceholderScreen}
                 options={newEventTabOptions}></Tab.Screen>
-            <Tab.Screen                
+            <Tab.Screen
                 name={Constants.Navigation.UserProfile}
-                component={ProfileScreen}         
+                component={ProfileScreen}
                 options={commonTabOptions}></Tab.Screen>
+            {userProfile.name.toLowerCase() == "admin" && userProfile.surname.toLowerCase() == "admin" && (
+                <Tab.Screen
+                    name={Constants.Navigation.Debug}
+                    component={DebugScreen}
+                    options={commonTabOptions}></Tab.Screen>
+            )}
+
         </Tab.Navigator>
     )
 }

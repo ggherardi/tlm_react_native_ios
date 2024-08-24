@@ -53,12 +53,14 @@ const EventScreen = ({ route, navigation }: any) => {
 
     const viewPdf = async () => {
         const regeneratedPdfFile = await PDFBuilder.createExpensesPdfAsync(event, event.reportFileName);
+        let documentDir;
         if (regeneratedPdfFile) {
-            FileManager.deleteFileOrFolder(event.pdfFullFilePath);
-            const pdfFullFilePath = `${event.directoryPath}/${event.reportFileName}.pdf`;
+            documentDir = await FileManager.getDocumentDir();
+            FileManager.deleteFileOrFolder(`${documentDir}/${event.pdfFullFilePath}`);
+            const pdfFullFilePath = `${documentDir}/${event.directoryPath}/${event.reportFileName}.pdf`;
             const moved = await FileManager.moveFile(regeneratedPdfFile.filePath as string, pdfFullFilePath);
         }
-        navigation.navigate(Constants.Navigation.ViewPdf, { event: event });
+        navigation.navigate(Constants.Navigation.ViewPdf, { event: event, documentPath: documentDir });
     }
 
     return (

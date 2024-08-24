@@ -7,11 +7,19 @@ import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 // import MlkitOcr from 'react-native-mlkit-ocr';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faWhatsapp } from '@fortawesome/free-brands-svg-icons/faWhatsapp';
+import { Utility } from '../lib/Utility';
+import dataContext from '../lib/models/DataContext';
+import ReactNativeBlobUtil, { ReactNativeBlobUtilStat } from 'react-native-blob-util';
+import NavigationHelper from '../lib/NavigationHelper';
+import { Constants } from '../lib/Constants';
+import { Input, NativeBaseProvider } from 'native-base';
+import { NativeBaseConfigProvider } from 'native-base/lib/typescript/core/NativeBaseContext';
 
 // @ts-ignore
 const DebugScreen = ({ navigation }) => {
   const [scannedImage, setScannedImage] = useState<string>();
   const [photo, setPhoto] = useState<any>();
+  const [directoryPath, setDirectoryPath] = useState("/var/mobile/Containers/Data/Application/9063147D-80E4-41EB-968D-1F997A991A9E/Documents/mmkv")
 
   const scanDocument = async () => {
     try {
@@ -35,19 +43,10 @@ const DebugScreen = ({ navigation }) => {
   }
 
   const imagePickerCommonOptions = { mediaType: "photo", maxWidth: 800, maxHeight: 600, includeBase64: true };
-  const onSelectImagePress = async () => {
-    let hasPermissions: boolean = false;
-    try {
-      const permissions = await FileManager.checkStorageReadPermissions();
-      hasPermissions = permissions.success;
-    } catch (err) {
-      hasPermissions = false;
-    }
-    if (!hasPermissions) {
-      return;
-    }
-    // @ts-ignore
-    launchImageLibrary(imagePickerCommonOptions, onImageSelect);
+
+  const goBack = () => {
+    console.log(navigation);
+    navigation.replace(Constants.Navigation.Home);
   }
 
   const onImageSelect = async (media: any) => {
@@ -56,7 +55,7 @@ const DebugScreen = ({ navigation }) => {
       setPhoto(photo);
       // const resultFromUri = await MlkitOcr.detectFromUri(photo.uri);
       // console.log(resultFromUri);
-            
+
       /* GG: WIP total amount recognition */
       let newArr: any[] = [];
       // resultFromUri.map(a => { 
@@ -72,27 +71,51 @@ const DebugScreen = ({ navigation }) => {
     }
   };
 
-  console.log("Image: ", scannedImage);
-  useEffect(() => {
-    // call scanDocument on load
-    FileManager.checkCameraPermissions();
-  }, []);
+  const readProfile = () => {
+    console.log(dataContext.Events);
+    const profile = Utility.GetUserProfile();
+    // console.log(profile);
+  }
 
-  const debug = () => {
+  const stat = async () => {
+    const stat: ReactNativeBlobUtilStat = await FileManager.stat(ReactNativeBlobUtil.fs.dirs.DocumentDir);
+    console.log("Stat: ", stat);
+  }
 
-  };
+  const ls = async () => {
+    const directories: ReactNativeBlobUtilStat[] = await FileManager.ls(ReactNativeBlobUtil.fs.dirs.DocumentDir);
+    for (const dir in directories) {
+      console.log(`[${dir}]`, directories[dir]);
+    }
+  }
+
+  const listDirectory = async () => {
+    const directories: ReactNativeBlobUtilStat[] = await FileManager.ls(directoryPath);
+    for (const dir in directories) {
+      console.log(`[${dir}]`, directories[dir]);
+    }
+  }
+
+  const expenses = () => {
+    console.log(dataContext.ExpenseReports.getAllData());
+  }
 
   return (
-    <ScrollView>
-      <Button title={'Debug button'} onPress={scanDocument} />
-      <Button title={'Pick image'} onPress={onSelectImagePress} />
-      <FontAwesomeIcon icon={faWhatsapp} />
-      {/* <Image
+    <NativeBaseProvider>
+      <ScrollView>
+        <Button title={'Read Profile'} onPress={readProfile} />
+        <Button title={'Stat'} onPress={stat} />
+        <Button title={'List Directories'} onPress={ls} />
+        <Input multiline={true} defaultValue={directoryPath} placeholder="Directory"></Input>
+        <Button title={'List Directory'} onPress={listDirectory} />
+        <Button title={'Expenses'} onPress={expenses} />
+        {/* <Image
         resizeMode="contain"
         style=
       source=
     /> */}
-    </ScrollView>);
-}
+      </ScrollView>
+    </NativeBaseProvider>
+)}
 
 export default DebugScreen;
