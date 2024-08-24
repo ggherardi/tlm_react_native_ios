@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     expenseAmountContainer: {
-        flex: 2,
+        flex: 3,
         justifyContent: 'center'
     },
     day: {
