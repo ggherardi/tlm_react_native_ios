@@ -11,22 +11,26 @@ import { FileManager } from './FileManager';
 export const PDFBuilder = {
   createExpensesPdfAsync: async (event: BusinessEvent, fileName: string): Promise<RNHTMLtoPDF.Pdf> => {
     return new Promise(async (resolve, reject) => {
-      const directory = `Documents`;
-      console.log(`Creating pdf in directory: `, directory);
-      const expenses = Utility.GetExpensesForEvent(event);
-      const generatedHtml = await PDFBuilder.generateHtml(event, expenses);
-      const options = {
-        html: generatedHtml,
-        fileName: fileName,
-        directory: directory,
-      };
-
-      let file = await RNHTMLtoPDF.convert(options).catch(e => console.log("Error while creating pdf: ", e));
-      if (file) {
-        console.log(`File created: `, file.filePath);
-        resolve(file);
-      } else {
-        reject(undefined);
+      try {
+        const directory = `Documents`;
+        console.log(`Creating pdf in directory: `, directory);
+        const expenses = Utility.GetExpensesForEvent(event);
+        const generatedHtml = await PDFBuilder.generateHtml(event, expenses);
+        const options = {
+          html: generatedHtml,
+          fileName: fileName,
+          directory: directory,
+        };
+        let file = await RNHTMLtoPDF.convert(options).catch(e => console.log("Error while creating pdf: ", e));
+        if (file) {
+          console.log(`File created: `, file.filePath);
+          resolve(file);
+        } else {
+          reject(undefined);
+        }
+      }
+      catch (ex) {
+        console.log(ex);
       }
     });
   },
@@ -180,18 +184,17 @@ export const PDFBuilder = {
       html += `
       </div>
       `;
+      console.log(expenses);
+      // GG: I remove the travel refund expense since it has no image
+      expenses = expenses.filter(e => e.name != Constants.Generic.TravelRefundExpenseName);
 
-      // GG: I know this is slower, but it's much more readable this way
-      if (expenses.length && expenses[0].name == Constants.Generic.TravelRefundExpenseName) {
-        expenses.shift();
-      }
       for (let i = 0; i < expenses.length; i++) {
         const expense = expenses[i];
         const photoFilePath = `${documentDir}/${expense.photoFilePath}`;
+        console.log(`Expense with name: ${expense.name}, with amount: ${expense.amount} has picture in location: ${photoFilePath}`)
         const encodedImage = await FileManager.encodeBase64(photoFilePath);
         const isEven = i % 2 == 0;
         const shouldPageBreak = i % 4 == 0;
-        console.log(`Expense with amount: ${expense.amount} has picture in location: ${photoFilePath} and encoding is: ${encodedImage}`)
         html += shouldPageBreak ? `
         <div class="pagebreak"></div>` : ``;
         html += isEven ? `

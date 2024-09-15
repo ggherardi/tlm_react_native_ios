@@ -1,7 +1,7 @@
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { FormControl, HStack, Input, NativeBaseProvider, Select, TextArea } from 'native-base';
-import { useEffect, useState } from 'react';
-import React, { Alert, Image, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { useEffect, useRef, useState } from 'react';
+import React, { Alert, Image, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, View } from 'react-native';
 import GlobalStyles, { ThemeColors } from '../lib/GlobalStyles';
 import { Utility } from '../lib/Utility';
 import { InputSideButton } from '../lib/components/InputSideButtonComponent';
@@ -35,6 +35,7 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
     const [isFormValid, setIsFormValid] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [validationErrors, setValidationErrors] = useState({});
+    const scrollViewRef = useRef<ScrollView>(null);
 
     const event: BusinessEvent = route.params.event;
     const extraCurrencies: any[] = event.currencies ? event.currencies : [];
@@ -123,7 +124,7 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
         const resultFromUri = await MlkitOcr.detectFromUri(picture.uri);
         console.log("resultFromUri: ", resultFromUri);
 
-        /* GG: The logic I applied is the following: I take all the text from the picture (they are an array of texts). From this array, I create a new array containing numbers with decimals, which should be currencies. 
+        /* GG: The logic I applied is the following: I take all the text from the picture (they are an array of texts). From this array, I create a new array containing numbers with decimals, which should be currencies.
         From this array I take the highest value, which should be the total amount */
         let allValuesWithDecimalsInPicture: any[] = [];
         resultFromUri.map(a => {
@@ -251,12 +252,19 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
         setExpenses(dataContext.ExpenseReports.getAllData());
     }
 
+    const scrollToY = () => {
+        setTimeout(() => {
+          scrollViewRef.current?.scrollToEnd();
+        }, 100);
+      }
+
     Utility.OnFocus({ navigation: navigation, onFocusAction: refreshData });
 
     return (
         <NativeBaseProvider>
             <ModalLoaderComponent isLoading={isLoading} text='Creazione spesa in corso..' />
-            <View style={styles.container}>
+            <KeyboardAvoidingView behavior={Platform.OS == 'ios' ? 'padding' : 'height'} keyboardVerticalOffset={100}>
+            <ScrollView ref={scrollViewRef} style={styles.container}>
                 <FormControl style={GlobalStyles.mt15} isRequired isDisabled>
                     <FormControl.Label>Foto</FormControl.Label>
                     <HStack style={[GlobalStyles.pt15]}>
@@ -280,11 +288,16 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
                         <FormControl style={GlobalStyles.mt15} isRequired isInvalid={'expenseName' in validationErrors}>
                             <FormControl.Label>Titolo spesa</FormControl.Label>
                         </FormControl>
-                        <Select width={"100%"} onValueChange={(item) => setExpenseName(item)} selectedValue={expenseName} borderColor={'expenseName' in validationErrors ? 'red.500' : 'gray.300'} placeholder='Selezionare una voce'>
-                            {expenseItems != undefined && expenseItems.length > 0 && expenseItems.map(item => (
-                                <Select.Item key={item} label={item} value={item} />
-                            ))}
-                        </Select>
+                        <ScrollView horizontal={true} contentContainerStyle={{ flexGrow: 1 }} scrollEnabled={false}>
+                            <View style={{ width: '100%' }}>
+                                <Select
+                                    width={"100%"} onValueChange={(item) => setExpenseName(item)} selectedValue={expenseName} borderColor={'expenseName' in validationErrors ? 'red.500' : 'gray.300'} placeholder='Selezionare una voce'>
+                                    {expenseItems != undefined && expenseItems.length > 0 && expenseItems.map(item => (
+                                        <Select.Item key={item} label={item} value={item} />
+                                    ))}
+                                </Select>
+                            </View>
+                        </ScrollView>
                         <FormErrorMessageComponent text='Campo obbligatorio' field='expenseName' validationArray={validationErrors} />
 
                         <FormControl style={GlobalStyles.mt15} isRequired isInvalid={'expenseAmount' in validationErrors}>
@@ -328,14 +341,15 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
                         </FormControl>
                         <FormControl style={GlobalStyles.mt15} isRequired={expenseName == "altro"} isInvalid={'expenseDescription' in validationErrors}>
                             <FormControl.Label>Descrizione della spesa</FormControl.Label>
-                            <TextArea placeholder="es. Taxi per trasferimento aeroporto" onChange={handleExpenseDescriptionChange} autoCompleteType={true} isInvalid={'expenseDescription' in validationErrors}></TextArea>
+                            <TextArea placeholder="es. Taxi per trasferimento aeroporto" onChange={handleExpenseDescriptionChange} autoCompleteType={true} isInvalid={'expenseDescription' in validationErrors} onFocus={scrollToY}></TextArea>
                             <FormErrorMessageComponent text='Campo obbligatorio con voce "altro" selezionata' field='expenseDescription' validationArray={validationErrors} />
                         </FormControl>
                     </View>
                 ) : (
                     <Text></Text>
                 )}
-            </View>
+            </ScrollView>
+            </KeyboardAvoidingView>
         </NativeBaseProvider>
     )
 };
@@ -343,8 +357,9 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
 const styles = StyleSheet.create({
     container: {
         // flex: 1,
-        justifyContent: 'flex-start',
-        alignItems: 'center',
+        // justifyContent: 'flex-start',
+        // alignItems: 'center',
+        height: '100%',
         padding: 20,
         backgroundColor: 'white',
     },

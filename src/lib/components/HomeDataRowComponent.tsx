@@ -120,7 +120,7 @@ export const HomeDataRowComponent = ({ event, onDelete, index, navigation }: IHo
                             ) : (
                                 <Text style={[styles.totalAmountText, { color: totalAmount >= 0 ? ThemeColors.green : ThemeColors.danger }]}>{totalAmount >= 0 ? "devi ricevere" : "devi restituire"}</Text>
                             )}
-                            <Text style={[styles.totalAmountText, { color: totalAmount >= 0 ? ThemeColors.green : ThemeColors.danger }]}>{Math.abs(totalAmount)} {event.mainCurrency.symbol}</Text>
+                            <Text style={[styles.totalAmountText, { color: totalAmount >= 0 ? ThemeColors.green : ThemeColors.danger }]}>{Math.abs(totalAmount).toFixed(2)} {event.mainCurrency.symbol}</Text>
                         </VStack>
                     </Row>
                 </Pressable>
