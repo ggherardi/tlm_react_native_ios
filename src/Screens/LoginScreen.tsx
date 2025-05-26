@@ -43,7 +43,7 @@ const LoginScreen = ({ navigation, route }: any) => {
     const profile = new UserProfile();
     profile.name = name ? name.trim() : '';
     profile.surname = surname ? surname.trim() : '';
-    profile.email = email ? email.trim() : 'info@tourleadermanagement.ch';
+    profile.email = email ? email.trim() : 'nota-spese@tourleadermanagement.ch';
     dataContext.UserProfile.saveData([profile]);
     Utility.ShowSuccessMessage(`Bentornato, ${profile.name}`);
     navigation.replace(Constants.Navigation.Home);

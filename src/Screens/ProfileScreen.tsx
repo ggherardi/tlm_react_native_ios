@@ -12,7 +12,7 @@ const ProfileScreen = ({ navigation, route }: any) => {
     const [userProfile, setUserProfile] = useState<UserProfile>(Utility.GetUserProfile());
     const [name, setName] = useState(userProfile.name);
     const [surname, setSurname] = useState(userProfile.surname);
-    const [email, setEmail] = useState(userProfile.email ? userProfile.email : "info@tourleadermanagement.ch");
+    const [email, setEmail] = useState(userProfile.email ? userProfile.email : "nota-spese@tourleadermanagement.ch");
     const [validationErrors, setValidationErrors] = useState({});
 
     useEffect(() => {
