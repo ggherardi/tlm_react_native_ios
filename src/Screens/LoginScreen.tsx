@@ -77,7 +77,7 @@ const LoginScreen = ({ navigation, route }: any) => {
         <View>
           <Text style={[{ display: showInfo ? 'flex' : 'none' }, styles.descriptionText]}>Inserire nome e cognome che verranno visualizzati da TLM quando verrà inviata la nota spese. Sarà sempre possibile cambiarli dalle impostazioni.</Text>
           <FormControl style={GlobalStyles.mt15} isRequired isInvalid={"name" in validationErrors}>
-            <LoginInputComponent defaultValue={name} placeholder='nome*' onChange={(e: any) => setName(e.nativeEvent.text)} borderColor={"name" in validationErrors ? 'red.500' : 'gray.300'} />
+            <LoginInputComponent defaultValue={name} placeholder='nomes *' onChange={(e: any) => setName(e.nativeEvent.text)} borderColor={"name" in validationErrors ? 'red.500' : 'gray.300'} />
           </FormControl>
           <FormControl style={GlobalStyles.mt15} isRequired isInvalid={"surname" in validationErrors}>
             <LoginInputComponent defaultValue={surname} placeholder='cognome*' onChange={(e: any) => setSurname(e.nativeEvent.text)} borderColor={"surname" in validationErrors ? 'red.500' : 'gray.300'} />

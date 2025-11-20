@@ -11,7 +11,7 @@ import { NavigationFakeButtonComponent } from '../lib/components/NavigationFakeB
 import { useEffect } from 'react';
 import NavigationHelper from '../lib/NavigationHelper';
 import { FileManager } from '../lib/FileManager';
-import DebugScreen from './DebugScreen';
+// import DebugScreen from './DebugScreen';
 import { Utility } from '../lib/Utility';
 
 const Tab = createBottomTabNavigator();
@@ -76,12 +76,12 @@ const HomeScreen = ({ navigation, route }: any) => {
                 name={Constants.Navigation.UserProfile}
                 component={ProfileScreen}
                 options={commonTabOptions}></Tab.Screen>
-            {userProfile.name.toLowerCase() == "admin" && userProfile.surname.toLowerCase() == "admin" && (
+            {/* {userProfile.name.toLowerCase() == "admin" && userProfile.surname.toLowerCase() == "admin" && (
                 <Tab.Screen
                     name={Constants.Navigation.Debug}
                     component={DebugScreen}
                     options={commonTabOptions}></Tab.Screen>
-            )}
+            )} */}
 
         </Tab.Navigator>
     )

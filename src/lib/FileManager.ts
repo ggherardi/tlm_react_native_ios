@@ -1,8 +1,8 @@
 import { PermissionsAndroid, Platform } from 'react-native';
-// import RNFetchBlob from 'rn-fetch-blob';
-import ReactNativeBlobUtil, { ReactNativeBlobUtilStat } from 'react-native-blob-util';
+import RNFS, { StatResult, ReadDirItem } from 'react-native-fs';
 import { PromiseResult } from './models/PromiseResult';
 import ImageResizer, { Response } from '@bam.tech/react-native-image-resizer';
+
 
 export const FileManager = {
   checkStoragePermissions: async (): Promise<PromiseResult> => {
@@ -61,60 +61,62 @@ export const FileManager = {
   },
 
   createFolder: async (path: string): Promise<string> => {
-    console.log(ReactNativeBlobUtil.fs.dirs);
     return new Promise<string>(async (resolve, reject) => {
-      const folderToCreate = `${ReactNativeBlobUtil.fs.dirs.DocumentDir}/${path}`;
+      const folderToCreate = `${RNFS.DocumentDirectoryPath}/${path}`;
       console.log("Folder to create:", folderToCreate);
-      ReactNativeBlobUtil.fs.mkdir(folderToCreate)
+      RNFS.mkdir(folderToCreate)
         .then(() => resolve(folderToCreate))
-        .catch(() => reject());
+        .catch(err => {
+          console.log('Error creating folder', err);
+          reject(err);
+        });
     });
   },
-
+  
   deleteFileOrFolder: (path: string) => {
     console.log("Path is: ", path);
-    ReactNativeBlobUtil.fs.unlink(path)
-      .then((v) => console.log(`Folder ${path} deleted (${v})`))
-      .catch((err) => console.log(`Error deleting path ${path} (${err})`))
-  },
+    RNFS.unlink(path)
+      .then(() => console.log(`Path ${path} deleted`))
+      .catch((err) => console.log(`Error deleting path ${path} (${err})`));
+  },  
 
   moveFile: async (sourcePath: string, destinationPath: string) => {
     console.log("Moving file from path: ", sourcePath, " to path: ", destinationPath);
     return new Promise<boolean>((resolve, reject) => {
-      ReactNativeBlobUtil.fs.mv(sourcePath, destinationPath)
-        .then((v) => {
-          console.log(`${sourcePath} moved to (${destinationPath}) (${v})`);
+      RNFS.moveFile(sourcePath, destinationPath)
+        .then(() => {
+          console.log(`${sourcePath} moved to (${destinationPath})`);
           resolve(true);
         })
         .catch(err => {
-          console.log(`Error while moving ${sourcePath} to ${destinationPath} (${err})`)
+          console.log(`Error while moving ${sourcePath} to ${destinationPath} (${err})`);
           reject(false);
-        })
-    })
-  },
+        });
+    });
+  },  
 
   saveFromBase64: async (path: string, base64: string): Promise<boolean> => {
     return new Promise<boolean>((resolve, reject) => {
-      ReactNativeBlobUtil.fs.writeFile(path, base64, 'base64')
-        .then(v => {
-          console.log(`Photo succesfully saved in path ${path} (${v})`);
+      RNFS.writeFile(path, base64, 'base64')
+        .then(() => {
+          console.log(`Photo successfully saved in path ${path}`);
           resolve(true);
         })
         .catch(err => {
-          console.log(`Error while saving photo in path ${path} (${err})`)
+          console.log(`Error while saving photo in path ${path} (${err})`);
           reject(false);
-        })
+        });
     });
-  },
+  },  
 
-  encodeBase64: async (path: string): Promise<any> => {
-    return new Promise<any>(async (resolve, reject) => {
-      ReactNativeBlobUtil.fs.readFile(path, 'base64')
-        .then(e => resolve(e))
+  encodeBase64: async (path: string): Promise<string> => {
+    return new Promise<string>((resolve, reject) => {
+      RNFS.readFile(path, 'base64')
+        .then(data => resolve(data))
         .catch(err => reject(err));
     });
   },
-
+  
   resizeImage: async (imagePath: string, outputDirectory: string, width: number, height: number): Promise<Response> => {
     return new Promise(async (resolve, reject) => {
       try {
@@ -130,33 +132,33 @@ export const FileManager = {
   },
 
   getDocumentDir: async (): Promise<string> => {
-    return new Promise (async (resolve, reject) => {
-      const dirStat = await ReactNativeBlobUtil.fs.stat(ReactNativeBlobUtil.fs.dirs.DocumentDir);
-      if (dirStat) {
-        resolve (dirStat.path);
-      } else {
-        reject ();
-      }
-    })
+    return new Promise((resolve) => {
+      resolve(RNFS.DocumentDirectoryPath);
+    });
   },
 
-  ls: async (path: string): Promise<ReactNativeBlobUtilStat[]> => {
+  ls: async (path: string): Promise<ReadDirItem[]> => {
     return new Promise(async (resolve, reject) => {
-      const ls = await ReactNativeBlobUtil.fs.lstat(path);
-      if (ls) {
-        resolve (ls);
+      try {
+        const ls = await RNFS.readDir(path);
+        resolve(ls);
+      } catch (err) {
+        console.log('Error reading dir', err);
+        reject(err);
       }
-      reject();
-    })
+    });
   },
+  
 
-  stat: async (path: string): Promise<ReactNativeBlobUtilStat> => {
+  stat: async (path: string): Promise<StatResult> => {
     return new Promise(async (resolve, reject) => {
-      const stat: ReactNativeBlobUtilStat = await ReactNativeBlobUtil.fs.stat(ReactNativeBlobUtil.fs.dirs.DocumentDir)
-      if (stat) {
-        resolve (stat);
+      try {
+        const stat = await RNFS.stat(path);
+        resolve(stat);
+      } catch (err) {
+        console.log('Error getting stat', err);
+        reject(err);
       }
-      reject();
-    })
-  },
+    });
+  },  
 }
