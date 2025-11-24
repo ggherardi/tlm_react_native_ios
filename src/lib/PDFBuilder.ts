@@ -49,29 +49,34 @@ export const PDFBuilder = {
       let html = `
       <style>
         ${Bootstrap.style}
-      
+        body { margin: 0; padding: 0; }
+
         .page {
           position: relative;
           min-height: 100vh;
           overflow: hidden;
         }
 
-        /* Use inline img because some renderers drop background images */
+        .page.break-after {
+          page-break-after: always;
+        }
+
+        /* Per-page watermark (receipts pages) */
         .watermark {
           position: absolute;
-          top: 70%;
+          top: 50%;
           left: 50%;
           transform: translate(-50%, -50%) rotate(-25deg);
           width: 80%;
           opacity: 0.08;
-          z-index: 999;
+          z-index: 0;
           pointer-events: none;
         }
 
         /* Keep regular content above the watermark */
         .content {
           position: relative;
-          z-index: 2;
+          z-index: 1;
         }
       
         .font-20 {
@@ -93,7 +98,7 @@ export const PDFBuilder = {
           .pagebreak { page-break-before: always; }
         }      
       </style>
-      <div class="page">
+      <div class="page break-after">
         <img class="watermark" src='${Images.tlm_logo.base_64}' />
         <div class="content">            
         <img src='${Images.tlm_logo.base_64}' width="300" />
@@ -140,7 +145,14 @@ export const PDFBuilder = {
             <span class="font-weight-bold">${event.totalTravelledKms}</span>
           </div>
         </div>
-  
+      `;
+
+      // Main expenses table with pagination
+      const rowsPerPage = 16; // approx. rows per page before break
+      let rowsOnPage = 0;
+
+      const openTable = () => {
+        html += `
         <table class="table">
           <thead>          
             <tr>
@@ -150,21 +162,52 @@ export const PDFBuilder = {
               <th class="text-right">Costo</th>
             </tr>
           </thead>
-          <tbody>              
-      `;
+          <tbody>`;
+      };
 
-      // Main table
+      const closeTable = () => {
+        html += `
+          </tbody>
+        </table>`;
+      };
+
+      const openSummaryPage = (isFirst: boolean) => {
+        const pageClass = isFirst ? 'page' : 'page break-after';
+        html += `
+      </div>
+    </div>
+    <div class="${pageClass}">
+      <img class="watermark" src='${Images.tlm_logo.base_64}' />
+      <div class="content">`;
+      };
+
+      // Start first table on first page
+      openTable();
+
       for (let i = 0; i < expenses.length; i++) {
         const expense = expenses[i];
+        // Add row
         html += `
             <tr>
               <td>${expense.date ? Utility.FormatDateDDMMYYYY(expense.date) : ''}</td>
               <td>${expense.name}</td>
               <td>${expense.description}</td>
               <td class="text-right">${expense.amount.toFixed(2)} ${event.mainCurrency.symbol}</td>
-            </tr>
-        `;
+            </tr>`;
+        rowsOnPage++;
+
+        // If we hit the limit and there are more rows, break page
+        const moreRows = i < expenses.length - 1;
+        if (rowsOnPage >= rowsPerPage && moreRows) {
+          closeTable();
+          // open new page for summary continuation
+          openSummaryPage(false);
+          openTable();
+          rowsOnPage = 0;
+        }
       }
+
+      // Totals row on last page
       html += `
             <tr>
               <td></td>
@@ -177,9 +220,8 @@ export const PDFBuilder = {
               <td>
                 <div class="bg-warning py-3 font-20 font-weight-bold text-right pr-2">${totalAmount?.toFixed(2)} ${event.mainCurrency.symbol}</div>
               </td>
-            </tr>
-          </tbody>
-        </table>`;
+            </tr>`;
+      closeTable();
 
       // Cash fund table
       html += `
@@ -209,9 +251,7 @@ export const PDFBuilder = {
 
       html += `
         </div>
-      </div>
-      <div class="pagebreak"></div>
-      `;
+      </div>`;
       console.log(expenses);
       // GG: I remove the travel refund expense since it has no image
       expenses = expenses.filter(e => e.name != Constants.Generic.TravelRefundExpenseName);
@@ -226,15 +266,13 @@ export const PDFBuilder = {
         const isRowStart = pageIndex % 2 === 0;
         const isRowEnd = pageIndex % 2 === 1 || i === expenses.length - 1;
         const isPageEnd = pageIndex === 3 || i === expenses.length - 1;
+        const isLastPage = i + 4 >= expenses.length;
 
         if (pageIndex === 0) {
           // New page for receipts
-          if (i > 0) {
-            html += `
-        <div class="pagebreak"></div>`;
-          }
+          const pageClass = isLastPage ? 'page' : 'page break-after';
           html += `
-        <div class="page">
+        <div class="${pageClass}">
           <img class="watermark" src='${Images.tlm_logo.base_64}' />
           <div class="content">`;
         }
