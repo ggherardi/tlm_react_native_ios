@@ -53,7 +53,7 @@ const ViewPdfScreen = ({ navigation, route }: any) => {
     <NativeBaseProvider>
       <View style={styles.container}>
         {pdfSource != undefined && pdfSource != null && (
-          <Pdf
+          <Pdf 
             trustAllCerts={false}
             source={pdfSource}
             onLoadComplete={(numberOfPages, filePath) => {

@@ -99,9 +99,9 @@ export const PDFBuilder = {
         }      
       </style>
       <div class="page break-after">
-        <img class="watermark" src='${Images.tlm_logo.base_64}' />
         <div class="content">            
         <img src='${Images.tlm_logo.base_64}' width="300" />
+        <img class="watermark" src='${Images.tlm_logo.base_64}' />
         <h1 class="text-center mt-5">NOTA SPESE</h1>
         
         <div class="text-right pt-3">        
@@ -177,7 +177,6 @@ export const PDFBuilder = {
       </div>
     </div>
     <div class="${pageClass}">
-      <img class="watermark" src='${Images.tlm_logo.base_64}' />
       <div class="content">`;
       };
 
