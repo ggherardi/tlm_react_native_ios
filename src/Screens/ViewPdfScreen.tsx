@@ -1,5 +1,6 @@
 import { NativeBaseProvider } from 'native-base';
-import React, { Dimensions, StyleSheet, View } from 'react-native';
+import React from 'react';
+import { Dimensions, StyleSheet, View } from 'react-native';
 import { BusinessEvent } from '../lib/models/BusinessEvent';
 import { useCustomHeaderWithButtonAsync } from '../lib/components/CustomHeaderComponent';
 import Pdf from 'react-native-pdf';
