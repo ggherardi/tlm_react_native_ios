@@ -210,6 +210,7 @@ export const PDFBuilder = {
       html += `
         </div>
       </div>
+      <div class="pagebreak"></div>
       `;
       console.log(expenses);
       // GG: I remove the travel refund expense since it has no image
@@ -220,22 +221,48 @@ export const PDFBuilder = {
         const photoFilePath = `${documentDir}/${expense.photoFilePath}`;
         console.log(`Expense with name: ${expense.name}, with amount: ${expense.amount} has picture in location: ${photoFilePath}`)
         const encodedImage = await FileManager.encodeBase64(photoFilePath);
-        const isEven = i % 2 == 0;
-        const shouldPageBreak = i % 4 == 0;
-        html += shouldPageBreak ? `
-        <div class="pagebreak"></div>` : ``;
-        html += isEven ? `
-          <div class="row my-5">` : ``;
+
+        const pageIndex = i % 4;
+        const isRowStart = pageIndex % 2 === 0;
+        const isRowEnd = pageIndex % 2 === 1 || i === expenses.length - 1;
+        const isPageEnd = pageIndex === 3 || i === expenses.length - 1;
+
+        if (pageIndex === 0) {
+          // New page for receipts
+          if (i > 0) {
+            html += `
+        <div class="pagebreak"></div>`;
+          }
+          html += `
+        <div class="page">
+          <img class="watermark" src='${Images.tlm_logo.base_64}' />
+          <div class="content">`;
+        }
+
+        if (isRowStart) {
+          html += `
+            <div class="row my-5">`;
+        }
+
         html += `
-            <div class="col-6 text-center">
-              <span>Scontrino per la spesa:</span>
-              <span>${expense.name} - ${Utility.FormatDateDDMMYYYY(expense.date)} - ${expense.amount} ${event.mainCurrency.symbol}</span>
-              <div class="d-flex" style="height: 550px; justify-content: center;">
-                <img class="tlm-image mt-5" src="data:image/jpg;base64, ${encodedImage}" height="500">
-              </div>              
+              <div class="col-6 text-center">
+                <span>Scontrino per la spesa:</span>
+                <span>${expense.name} - ${Utility.FormatDateDDMMYYYY(expense.date)} - ${expense.amount} ${event.mainCurrency.symbol}</span>
+                <div class="d-flex" style="height: 550px; justify-content: center;">
+                  <img class="tlm-image mt-5" src="data:image/jpg;base64, ${encodedImage}" height="500">
+                </div>              
+              </div>`;
+
+        if (isRowEnd) {
+          html += `
             </div>`;
-        html += !isEven ? `
-          </div>` : ``;
+        }
+
+        if (isPageEnd) {
+          html += `
+          </div>
+        </div>`;
+        }
       }
       resolve(html);
     })
