@@ -50,6 +50,30 @@ export const PDFBuilder = {
       <style>
         ${Bootstrap.style}
       
+        .page {
+          position: relative;
+          min-height: 100vh;
+          overflow: hidden;
+        }
+
+        /* Use inline img because some renderers drop background images */
+        .watermark {
+          position: absolute;
+          top: 70%;
+          left: 50%;
+          transform: translate(-50%, -50%) rotate(-25deg);
+          width: 80%;
+          opacity: 0.08;
+          z-index: 999;
+          pointer-events: none;
+        }
+
+        /* Keep regular content above the watermark */
+        .content {
+          position: relative;
+          z-index: 2;
+        }
+      
         .font-20 {
           font-size: 20px;
         }
@@ -69,7 +93,9 @@ export const PDFBuilder = {
           .pagebreak { page-break-before: always; }
         }      
       </style>
-      <div>            
+      <div class="page">
+        <img class="watermark" src='${Images.tlm_logo.base_64}' />
+        <div class="content">            
         <img src='${Images.tlm_logo.base_64}' width="300" />
         <h1 class="text-center mt-5">NOTA SPESE</h1>
         
@@ -182,6 +208,7 @@ export const PDFBuilder = {
         </div>`;
 
       html += `
+        </div>
       </div>
       `;
       console.log(expenses);
