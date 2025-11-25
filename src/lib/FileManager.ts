@@ -161,4 +161,16 @@ export const FileManager = {
       }
     });
   },  
+
+  getFile: async (filePath: string, encoding?: string): Promise<string> => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const file = await RNFS.readFile(filePath, encoding);
+        resolve(file);
+      } catch (err) {
+        console.log('Error getting file ', err);
+        reject(err);
+      }
+    });
+  }
 }

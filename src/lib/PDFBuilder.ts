@@ -3,10 +3,12 @@ import { Bootstrap } from './Bootstrap';
 import { BusinessEvent } from './models/BusinessEvent';
 import { ExpenseReport } from './models/ExpenseReport';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
+import { degrees, PDFDocument, rgb } from 'pdf-lib';
 import { Constants } from './Constants';
 import dataContext from './models/DataContext';
 import { Images } from '../assets/Images';
 import { FileManager } from './FileManager';
+import { Buffer } from 'buffer'
 
 export const PDFBuilder = {
   createExpensesPdfAsync: async (event: BusinessEvent, fileName: string): Promise<RNHTMLtoPDF.Pdf> => {
@@ -24,6 +26,7 @@ export const PDFBuilder = {
         let file = await RNHTMLtoPDF.convert(options).catch(e => console.log("Error while creating pdf: ", e));
         if (file) {
           console.log(`File created: `, file.filePath);
+          await PDFBuilder.addWatermarkToPages(file);
           resolve(file);
         } else {
           reject(undefined);
@@ -33,6 +36,28 @@ export const PDFBuilder = {
         console.log(ex);
       }
     });
+  },
+
+  addWatermarkToPages: async (file: RNHTMLtoPDF.Pdf) => {
+    const existingPDFBytes = await FileManager.getFile(file.filePath as string, 'base64');
+    const pdfDoc = await PDFDocument.load(Uint8Array.from(Buffer.from(existingPDFBytes as string, 'base64')));
+    const pages = pdfDoc.getPages();
+    const imageByteArray = Uint8Array.from(Buffer.from(Images.tlm_logo.base_64_no_header, 'base64'));
+    const embededImage = await pdfDoc.embedPng(imageByteArray);
+    for (let i = 0; i < pages.length; i++) {
+      const page = pages[i];
+      const { width, height } = page.getSize();
+      if (embededImage) {
+        page.drawImage(embededImage, {
+          x: 150,
+          y: height / 2 - 250,
+          rotate: degrees(45),
+          opacity: 0.20,
+        });
+      }
+    }
+    const pdfBytes = await pdfDoc.save();
+    FileManager.saveFromBase64(file.filePath as string, Buffer.from(pdfBytes).toString('base64'));
   },
 
   generateHtml: async (event: BusinessEvent, expenses: ExpenseReport[]): Promise<string> => {
@@ -80,7 +105,6 @@ export const PDFBuilder = {
           .pagebreak { page-break-before: always; }
         }      
       </style>     
-        <img class="watermark" src='${Images.tlm_logo.base_64}' />
         <img src='${Images.tlm_logo.base_64}' width="300" />
         <h1 class="text-center mt-5">NOTA SPESE</h1>
         
