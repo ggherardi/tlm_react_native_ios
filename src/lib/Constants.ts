@@ -15,6 +15,7 @@ export class Constants {
     DebugScreen: 'Debug',
     RefundKmScreen: 'Rimborso chilometrico',
     Debug: 'Debug',
+    UpdateApp: 'Aggiorna App',
   }
 
   static Generic = {
@@ -27,4 +28,8 @@ export class Constants {
       name: 'TLMReminder'
     }
   }  
+
+  static VersionCheck = {
+    VersionFileUrl: 'https://5cc097f0.tlmexpensesversionscheck.pages.dev/version.json'
+  }
 }

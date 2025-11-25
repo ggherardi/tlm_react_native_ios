@@ -10,6 +10,8 @@ import { Images } from '../assets/Images';
 import { Constants } from '../lib/Constants';
 import LoaderComponent, { LoaderSize } from '../lib/components/LoaderComponent';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { VersionFile } from '../lib/models/VersionFile';
+import { getVersion } from 'jest';
 
 const LoginScreen = ({ navigation, route }: any) => {
   const [userProfile, setUserProfile] = useState<UserProfile>(Utility.GetUserProfile());
@@ -23,13 +25,29 @@ const LoginScreen = ({ navigation, route }: any) => {
   const [showInfo, setShowInfo] = useState(false);
 
   useEffect(() => {
-    if (userProfile && userProfile.name && userProfile.surname) {
-      setIsLoading(true);
-      Utility.ShowSuccessMessage(`Bentornato, ${userProfile.name}`);
-      navigation.replace(Constants.Navigation.Home);
-      setIsLoading(false);
-    }
+    (async () => {
+      if (await doesAppNeedUpdate()) {
+        navigation.replace(Constants.Navigation.UpdateApp);
+      } else if (userProfile && userProfile.name && userProfile.surname) {
+        setIsLoading(true);
+        Utility.ShowSuccessMessage(`Bentornato, ${userProfile.name}`);
+        navigation.replace(Constants.Navigation.Home);
+        setIsLoading(false);
+      }
+    })
   }, []);
+
+  const doesAppNeedUpdate = async () => {
+    return new Promise(async (resolve, reject) => {
+      const jsonPromise = await fetch(Constants.VersionCheck.VersionFileUrl, {
+        method: 'GET',
+        headers: { Accept: 'application/json' }, 
+      });
+      const json: VersionFile = await jsonPromise.json();
+      console.log(`${getVersion()} < ${json.ios.min_supported_version}? ${getVersion() < json.ios.min_supported_version}`);
+      resolve(getVersion() < json.ios.min_supported_version);
+    });
+  }
 
   const login = () => {
     setIsDisabled(true);

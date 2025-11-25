@@ -27,6 +27,7 @@ import LoginScreen from './src/Screens/LoginScreen';
 import NotificationManager from './src/lib/NotificationManager';
 // import DebugScreen from './src/Screens/DebugScreen';
 import RefundKmScreen from './src/Screens/RefundKmScreen';
+import UpdateApp from './src/Screens/UpdateApp';
 
 library.add(fab, faSquareCheck, faBeerMugEmpty, faCalendar, faCalendarDay, faTrash, faPlus,
   faCalendarWeek, faTable, faTableCells, faTableList, faTableColumns, faTableCellsLarge, faTableTennis,
@@ -73,16 +74,17 @@ function App(): JSX.Element {
           <Stack.Screen name={Constants.Navigation.EditEventScreen} component={EditEventScreen} options={commonOptions} />
           <Stack.Screen name={Constants.Navigation.RefundKmScreen} component={RefundKmScreen} options={commonOptions} />
           <Stack.Screen name={Constants.Navigation.NewExpenseReport} component={NewExpenseReportScreen} options={commonOptions} />
+          <Stack.Screen name={Constants.Navigation.UpdateApp} component={UpdateApp} options={commonOptions} />
         </Stack.Navigator>
       </NavigationContainer>
-      {/* <FlashMessage position='top' /> */}
+      <FlashMessage position='top' />
     </>
   );
 }
 
 const loginScreenOptions = {
   headerShown: false,
-  // statusBarColor: ThemeColors.white
+  statusBarColor: ThemeColors.white
 }
 
 const commonOptions = {
