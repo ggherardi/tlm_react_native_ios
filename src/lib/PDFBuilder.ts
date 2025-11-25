@@ -49,35 +49,6 @@ export const PDFBuilder = {
       let html = `
       <style>
         ${Bootstrap.style}
-        body { margin: 0; padding: 0; }
-
-        .page {
-          position: relative;
-          min-height: 100vh;
-          overflow: hidden;
-        }
-
-        .page.break-after {
-          page-break-after: always;
-        }
-
-        /* Per-page watermark (receipts pages) */
-        .watermark {
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%) rotate(-25deg);
-          width: 80%;
-          opacity: 0.08;
-          z-index: 0;
-          pointer-events: none;
-        }
-
-        /* Keep regular content above the watermark */
-        .content {
-          position: relative;
-          z-index: 1;
-        }
       
         .font-20 {
           font-size: 20px;
@@ -93,15 +64,24 @@ export const PDFBuilder = {
           align-self: center;
           justify-content: center;
         }
-  
+        
+        .watermark {
+          // position: fixed;
+          // top: 50;
+          // left: 50%;
+          // transform: rotate(-25deg);
+          width: 80%;
+          opacity: 1;
+          z-index: 999;
+          pointer-events: none;
+        }
+
         @media print {
           .pagebreak { page-break-before: always; }
         }      
-      </style>
-      <div class="page break-after">
-        <div class="content">            
-        <img src='${Images.tlm_logo.base_64}' width="300" />
+      </style>     
         <img class="watermark" src='${Images.tlm_logo.base_64}' />
+        <img src='${Images.tlm_logo.base_64}' width="300" />
         <h1 class="text-center mt-5">NOTA SPESE</h1>
         
         <div class="text-right pt-3">        
@@ -145,14 +125,7 @@ export const PDFBuilder = {
             <span class="font-weight-bold">${event.totalTravelledKms}</span>
           </div>
         </div>
-      `;
-
-      // Main expenses table with pagination
-      const rowsPerPage = 16; // approx. rows per page before break
-      let rowsOnPage = 0;
-
-      const openTable = () => {
-        html += `
+  
         <table class="table">
           <thead>          
             <tr>
@@ -162,51 +135,21 @@ export const PDFBuilder = {
               <th class="text-right">Costo</th>
             </tr>
           </thead>
-          <tbody>`;
-      };
+          <tbody>              
+      `;
 
-      const closeTable = () => {
-        html += `
-          </tbody>
-        </table>`;
-      };
-
-      const openSummaryPage = (isFirst: boolean) => {
-        const pageClass = isFirst ? 'page' : 'page break-after';
-        html += `
-      </div>
-    </div>
-    <div class="${pageClass}">
-      <div class="content">`;
-      };
-
-      // Start first table on first page
-      openTable();
-
+      // Main table
       for (let i = 0; i < expenses.length; i++) {
         const expense = expenses[i];
-        // Add row
         html += `
             <tr>
               <td>${expense.date ? Utility.FormatDateDDMMYYYY(expense.date) : ''}</td>
               <td>${expense.name}</td>
               <td>${expense.description}</td>
               <td class="text-right">${expense.amount.toFixed(2)} ${event.mainCurrency.symbol}</td>
-            </tr>`;
-        rowsOnPage++;
-
-        // If we hit the limit and there are more rows, break page
-        const moreRows = i < expenses.length - 1;
-        if (rowsOnPage >= rowsPerPage && moreRows) {
-          closeTable();
-          // open new page for summary continuation
-          openSummaryPage(false);
-          openTable();
-          rowsOnPage = 0;
-        }
+            </tr>
+        `;
       }
-
-      // Totals row on last page
       html += `
             <tr>
               <td></td>
@@ -219,8 +162,9 @@ export const PDFBuilder = {
               <td>
                 <div class="bg-warning py-3 font-20 font-weight-bold text-right pr-2">${totalAmount?.toFixed(2)} ${event.mainCurrency.symbol}</div>
               </td>
-            </tr>`;
-      closeTable();
+            </tr>
+          </tbody>
+        </table>`;
 
       // Cash fund table
       html += `
@@ -249,8 +193,8 @@ export const PDFBuilder = {
         </div>`;
 
       html += `
-        </div>
-      </div>`;
+      </div>
+      `;
       console.log(expenses);
       // GG: I remove the travel refund expense since it has no image
       expenses = expenses.filter(e => e.name != Constants.Generic.TravelRefundExpenseName);
@@ -258,48 +202,24 @@ export const PDFBuilder = {
       for (let i = 0; i < expenses.length; i++) {
         const expense = expenses[i];
         const photoFilePath = `${documentDir}/${expense.photoFilePath}`;
-        console.log(`Expense with name: ${expense.name}, with amount: ${expense.amount} has picture in location: ${photoFilePath}`)
+        // console.log(`Expense with name: ${expense.name}, with amount: ${expense.amount} has picture in location: ${photoFilePath}`)
         const encodedImage = await FileManager.encodeBase64(photoFilePath);
-
-        const pageIndex = i % 4;
-        const isRowStart = pageIndex % 2 === 0;
-        const isRowEnd = pageIndex % 2 === 1 || i === expenses.length - 1;
-        const isPageEnd = pageIndex === 3 || i === expenses.length - 1;
-        const isLastPage = i + 4 >= expenses.length;
-
-        if (pageIndex === 0) {
-          // New page for receipts
-          const pageClass = isLastPage ? 'page' : 'page break-after';
-          html += `
-        <div class="${pageClass}">
-          <img class="watermark" src='${Images.tlm_logo.base_64}' />
-          <div class="content">`;
-        }
-
-        if (isRowStart) {
-          html += `
-            <div class="row my-5">`;
-        }
-
+        const isEven = i % 2 == 0;
+        const shouldPageBreak = i % 4 == 0;
+        html += shouldPageBreak ? `
+        <div class="pagebreak"></div>` : ``;
+        html += isEven ? `
+          <div class="row my-5">` : ``;
         html += `
-              <div class="col-6 text-center">
-                <span>Scontrino per la spesa:</span>
-                <span>${expense.name} - ${Utility.FormatDateDDMMYYYY(expense.date)} - ${expense.amount} ${event.mainCurrency.symbol}</span>
-                <div class="d-flex" style="height: 550px; justify-content: center;">
-                  <img class="tlm-image mt-5" src="data:image/jpg;base64, ${encodedImage}" height="500">
-                </div>              
-              </div>`;
-
-        if (isRowEnd) {
-          html += `
+            <div class="col-6 text-center">
+              <span>Scontrino per la spesa:</span>
+              <span>${expense.name} - ${Utility.FormatDateDDMMYYYY(expense.date)} - ${expense.amount} ${event.mainCurrency.symbol}</span>
+              <div class="d-flex" style="height: 550px; justify-content: center;">
+                <img class="tlm-image mt-5" src="data:image/jpg;base64, ${encodedImage}" height="500">
+              </div>              
             </div>`;
-        }
-
-        if (isPageEnd) {
-          html += `
-          </div>
-        </div>`;
-        }
+        html += !isEven ? `
+          </div>` : ``;
       }
       resolve(html);
     })
