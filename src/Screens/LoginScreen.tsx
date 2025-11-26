@@ -11,7 +11,8 @@ import { Constants } from '../lib/Constants';
 import LoaderComponent, { LoaderSize } from '../lib/components/LoaderComponent';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { VersionFile } from '../lib/models/VersionFile';
-import { getVersion } from 'jest';
+
+const appVersion: string = require('../../package.json').version;
 
 const LoginScreen = ({ navigation, route }: any) => {
   const [userProfile, setUserProfile] = useState<UserProfile>(Utility.GetUserProfile());
@@ -25,7 +26,9 @@ const LoginScreen = ({ navigation, route }: any) => {
   const [showInfo, setShowInfo] = useState(false);
 
   useEffect(() => {
+    console.log("I'm here");
     (async () => {
+      console.log("But not here");
       if (await doesAppNeedUpdate()) {
         navigation.replace(Constants.Navigation.UpdateApp);
       } else if (userProfile && userProfile.name && userProfile.surname) {
@@ -34,7 +37,7 @@ const LoginScreen = ({ navigation, route }: any) => {
         navigation.replace(Constants.Navigation.Home);
         setIsLoading(false);
       }
-    })
+    })();
   }, []);
 
   const doesAppNeedUpdate = async () => {
@@ -44,8 +47,8 @@ const LoginScreen = ({ navigation, route }: any) => {
         headers: { Accept: 'application/json' }, 
       });
       const json: VersionFile = await jsonPromise.json();
-      console.log(`${getVersion()} < ${json.ios.min_supported_version}? ${getVersion() < json.ios.min_supported_version}`);
-      resolve(getVersion() < json.ios.min_supported_version);
+      console.log(`${appVersion} < ${json.ios.min_supported_version}? ${appVersion < json.ios.min_supported_version}`);
+      resolve(appVersion < json.ios.min_supported_version);
     });
   }
 

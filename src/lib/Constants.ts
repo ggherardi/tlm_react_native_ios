@@ -30,6 +30,6 @@ export class Constants {
   }  
 
   static VersionCheck = {
-    VersionFileUrl: 'https://5cc097f0.tlmexpensesversionscheck.pages.dev/version.json'
+    VersionFileUrl: 'https://tlmexpensesversionscheck.pages.dev/version.json'
   }
 }
