@@ -1,13 +1,15 @@
 import React, { useEffect } from 'react';
-import { Image, SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { Image, SafeAreaView, StyleSheet, Text, View, Linking, Pressable } from 'react-native';
 import { Images } from '../assets/Images';
 import { ThemeColors } from '../lib/GlobalStyles';
+import { VersionFile } from '../lib/models/VersionFile';
 
 type UpdateAppProps = {
   navigation: any;
   route: {
     params?: {
       message?: string;
+      versionFile?: VersionFile;
     };
   };
 };
@@ -16,6 +18,7 @@ const UpdateApp = ({ navigation, route }: UpdateAppProps) => {
   const message =
     route?.params?.message ??
     'È disponibile una nuova versione. Aggiorna l’app per continuare a utilizzare tutte le funzionalità.';
+  const storeUrl = route.params?.versionFile?.ios?.store_url;
 
   useEffect(() => {
     // Hide header and disable gestures so the user cannot leave this screen.
@@ -31,6 +34,11 @@ const UpdateApp = ({ navigation, route }: UpdateAppProps) => {
         <View style={styles.content}>
           <Text style={styles.title}>Aggiorna l’app</Text>
           <Text style={styles.message}>{message}</Text>
+          {storeUrl ? (
+            <Pressable style={styles.button} onPress={() => Linking.openURL(storeUrl)}>
+              <Text style={styles.buttonText}>Vai allo Store</Text>
+            </Pressable>
+          ) : null}
         </View>
       </View>
     </SafeAreaView>
@@ -78,6 +86,19 @@ const styles = StyleSheet.create({
     color: ThemeColors.primary,
     textAlign: 'center',
     lineHeight: 22,
+  },
+  button: {
+    marginTop: 24,
+    backgroundColor: ThemeColors.primary,
+    paddingVertical: 14,
+    paddingHorizontal: 24,
+    borderRadius: 8,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '600',
+    textAlign: 'center',
   },
 });
 
