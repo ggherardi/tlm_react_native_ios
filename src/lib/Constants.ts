@@ -11,6 +11,7 @@ export class Constants {
     EventHistoryScreen: 'History',
     EventSettingsScreen: 'Impostazioni',
     EditEventScreen: 'Modifica evento',
+    EditExpenseReport: 'Modifica spesa',
     LoginScreen: 'Login',
     DebugScreen: 'Debug',
     RefundKmScreen: 'Rimborso chilometrico',

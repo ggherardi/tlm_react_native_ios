@@ -9,6 +9,7 @@ import GlobalStyles, { ThemeColors } from '../GlobalStyles';
 import { BusinessEvent } from '../models/BusinessEvent';
 import { renderRightAction } from './SwipableActionsComponent';
 import { FileManager } from '../FileManager';
+import { Constants } from '../Constants';
 
 interface IExpenseDataRow {
     expense: ExpenseReport;
@@ -22,7 +23,7 @@ export const ExpenseDataRowComponent = ({ expense: expense, event, onDelete, ind
     const [imageUri, setImageUri] = useState<string>();
 
     const goToExpense = () => {
-        // navigation.navigate(Constants.Navigation.EventHome, { expense: expense });
+        navigation.navigate(Constants.Navigation.EditExpenseReport, { expense, event });
     };
     const swipableRef = useRef<Swipeable>(null);
 

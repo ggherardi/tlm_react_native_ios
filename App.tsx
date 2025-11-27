@@ -27,6 +27,7 @@ import LoginScreen from './src/Screens/LoginScreen';
 import NotificationManager from './src/lib/NotificationManager';
 // import DebugScreen from './src/Screens/DebugScreen';
 import RefundKmScreen from './src/Screens/RefundKmScreen';
+import EditExpenseReportScreen from './src/Screens/EditExpenseReportScreen';
 import UpdateApp from './src/Screens/UpdateApp';
 
 library.add(fab, faSquareCheck, faBeerMugEmpty, faCalendar, faCalendarDay, faTrash, faPlus,
@@ -72,6 +73,7 @@ function App(): JSX.Element {
           <Stack.Screen name={Constants.Navigation.EventHome} component={EventHomeScreen} options={commonOptions} />
           <Stack.Screen name={Constants.Navigation.ViewPdf} component={ViewPdfScreen} options={commonOptions} />
           <Stack.Screen name={Constants.Navigation.EditEventScreen} component={EditEventScreen} options={commonOptions} />
+          <Stack.Screen name={Constants.Navigation.EditExpenseReport} component={EditExpenseReportScreen} options={commonOptions} />
           <Stack.Screen name={Constants.Navigation.RefundKmScreen} component={RefundKmScreen} options={commonOptions} />
           <Stack.Screen name={Constants.Navigation.NewExpenseReport} component={NewExpenseReportScreen} options={commonOptions} />
           <Stack.Screen name={Constants.Navigation.UpdateApp} component={UpdateApp} options={commonOptions} />
