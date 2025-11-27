@@ -52,15 +52,20 @@ const EventScreen = ({ route, navigation }: any) => {
     Utility.OnFocus({ navigation: navigation, onFocusAction: refreshData });
 
     const viewPdf = async () => {
-        const regeneratedPdfFile = await PDFBuilder.createExpensesPdfAsync(event, event.reportFileName);
-        let documentDir;
-        if (regeneratedPdfFile) {
-            documentDir = await FileManager.getDocumentDir();
-            FileManager.deleteFileOrFolder(`${documentDir}/${event.pdfFullFilePath}`);
-            const pdfFullFilePath = `${documentDir}/${event.directoryPath}/${event.reportFileName}.pdf`;
-            const moved = await FileManager.moveFile(regeneratedPdfFile.filePath as string, pdfFullFilePath);
+        setIsLoading(true);
+        try {
+            const regeneratedPdfFile = await PDFBuilder.createExpensesPdfAsync(event, event.reportFileName);
+            let documentDir;
+            if (regeneratedPdfFile) {
+                documentDir = await FileManager.getDocumentDir();
+                FileManager.deleteFileOrFolder(`${documentDir}/${event.pdfFullFilePath}`);
+                const pdfFullFilePath = `${documentDir}/${event.directoryPath}/${event.reportFileName}.pdf`;
+                await FileManager.moveFile(regeneratedPdfFile.filePath as string, pdfFullFilePath);
+            }
+            navigation.navigate(Constants.Navigation.ViewPdf, { event: event, documentPath: documentDir });
+        } finally {
+            setIsLoading(false);
         }
-        navigation.navigate(Constants.Navigation.ViewPdf, { event: event, documentPath: documentDir });
     }
 
     return (
