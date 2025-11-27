@@ -27,18 +27,27 @@ const LoginScreen = ({ navigation, route }: any) => {
 
   useEffect(() => {
     (async () => {
-      const jsonPromise = await fetch(Constants.VersionCheck.VersionFileUrl, {
-        method: 'GET',
-        headers: { Accept: 'application/json' }, 
-      });
-      const versionFileJson: VersionFile = await jsonPromise.json();
-      console.log(`${appVersion} < ${versionFileJson.ios.min_supported_version}? ${appVersion < versionFileJson.ios.min_supported_version}`);
-      const doesAppNeedUpdate = appVersion < versionFileJson.ios.min_supported_version;
+      let doesAppNeedUpdate = false;
+      let versionFileJson = {};
+      try {
+        const jsonPromise = await fetch(Constants.VersionCheck.VersionFileUrl, {
+          method: 'GET',
+          headers: { Accept: 'application/json' }, 
+        });
+        console.log("test");
+        const versionFileJson: VersionFile = await jsonPromise.json();
+        console.log(`${appVersion} < ${versionFileJson.ios.min_supported_version}? ${appVersion < versionFileJson.ios.min_supported_version}`);
+        doesAppNeedUpdate = appVersion < versionFileJson.ios.min_supported_version;
+      } catch (err) {
+        console.log("Errore while fetching", err);
+      }
       if (doesAppNeedUpdate) {
         // navigation.replace(Constants.Navigation.UpdateApp);
         console.log("navigating with ", versionFileJson);
         navigation.navigate(Constants.Navigation.UpdateApp, { versionFile: versionFileJson })
-      } else if (userProfile && userProfile.name && userProfile.surname) {
+      } 
+      if (userProfile && userProfile.name && userProfile.surname) {
+        console.log("Logging in..");
         setIsLoading(true);
         Utility.ShowSuccessMessage(`Bentornato, ${userProfile.name}`);
         navigation.replace(Constants.Navigation.Home);
@@ -46,18 +55,6 @@ const LoginScreen = ({ navigation, route }: any) => {
       }
     })();
   }, []);
-
-  const doesAppNeedUpdate = async () => {
-    return new Promise(async (resolve, reject) => {
-      const jsonPromise = await fetch(Constants.VersionCheck.VersionFileUrl, {
-        method: 'GET',
-        headers: { Accept: 'application/json' }, 
-      });
-      const json: VersionFile = await jsonPromise.json();
-      console.log(`${appVersion} < ${json.ios.min_supported_version}? ${appVersion < json.ios.min_supported_version}`);
-      resolve(appVersion < json.ios.min_supported_version);
-    });
-  }
 
   const login = () => {
     setIsDisabled(true);
