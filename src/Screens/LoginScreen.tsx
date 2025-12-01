@@ -28,24 +28,47 @@ const LoginScreen = ({ navigation, route }: any) => {
   useEffect(() => {
     (async () => {
       let doesAppNeedUpdate = false;
-      let versionFileJson = {};
+      let versionFileJson: VersionFile = {
+        version_schema: 1,
+        global_message: null,
+        maintenance: { enabled: false, message: '' },
+        ios: {
+          latest_version: appVersion,
+          min_supported_version: appVersion,
+          force_update: false,
+          store_url: '',
+          message: '',
+          changelog: [],
+        },
+        android: {
+          latest_version: appVersion,
+          min_supported_version: appVersion,
+          force_update: false,
+          store_url: '',
+          message: '',
+          changelog: [],
+        },
+      };
       try {
-        const jsonPromise = await fetch(Constants.VersionCheck.VersionFileUrl, {
+        const versionFileUrl = !__DEV__ ? Constants.VersionCheck.VersionFileUrl : Constants.VersionCheck.VersionFileUrlDebug;
+        console.log("VersionFileUrl: ", versionFileUrl);
+        const jsonPromise = await fetch(versionFileUrl, {
           method: 'GET',
           headers: { Accept: 'application/json' }, 
         });
-        console.log("test");
-        const versionFileJson: VersionFile = await jsonPromise.json();
+        versionFileJson = await jsonPromise.json();
+        console.log(versionFileJson);
         console.log(`${appVersion} < ${versionFileJson.ios.min_supported_version}? ${appVersion < versionFileJson.ios.min_supported_version}`);
         doesAppNeedUpdate = appVersion < versionFileJson.ios.min_supported_version;
+        console.log("Does app need updated? ", doesAppNeedUpdate);
       } catch (err) {
         console.log("Errore while fetching", err);
       }
       if (doesAppNeedUpdate) {
-        // navigation.replace(Constants.Navigation.UpdateApp);
-        console.log("navigating with ", versionFileJson);
-        navigation.navigate(Constants.Navigation.UpdateApp, { versionFile: versionFileJson })
-      } 
+        console.log("navigating with ", versionFileJson.version_schema);
+        navigation.replace(Constants.Navigation.UpdateApp, { versionFile: versionFileJson });
+        return;
+      }
       if (userProfile && userProfile.name && userProfile.surname) {
         console.log("Logging in..");
         setIsLoading(true);

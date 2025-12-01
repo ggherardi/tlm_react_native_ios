@@ -419,6 +419,7 @@
 			baseConfigurationReference = BC755E9DF867D7E0A96CD509 /* Pods-tlm_react_native_ios-tlm_react_native_iosTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEVELOPMENT_TEAM = BHJUY79D6X;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -447,6 +448,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
+				DEVELOPMENT_TEAM = BHJUY79D6X;
 				INFOPLIST_FILE = tlm_react_native_iosTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				LD_RUNPATH_SEARCH_PATHS = (
