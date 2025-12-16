@@ -1294,7 +1294,7 @@ PODS:
     - React-logger (= 0.74.2)
     - React-perflogger (= 0.74.2)
     - React-utils (= 0.74.2)
-  - RNDateTimePicker (8.5.0):
+  - RNDateTimePicker (8.5.1):
     - React-Core
   - RNFS (2.20.0):
     - React-Core
@@ -1346,7 +1346,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNSVG (15.15.0):
+  - RNSVG (13.14.0):
     - React-Core
   - SocketRocket (0.7.0)
   - Yoga (0.0.0)
@@ -1672,12 +1672,12 @@ SPEC CHECKSUMS:
   React-runtimescheduler: 56b642bf605ba5afa500d35790928fc1d51565ad
   React-utils: 4476b7fcbbd95cfd002f3e778616155241d86e31
   ReactCommon: ecad995f26e0d1e24061f60f4e5d74782f003f12
-  RNDateTimePicker: b5afe456eedb040a6c8099c5e5d17b3af4ef94af
+  RNDateTimePicker: 4d2bf1f7c190c178bd5df3b56f8162a04695e6e1
   RNFS: 4ac0f0ea233904cb798630b3c077808c06931688
   RNGestureHandler: 4bd75124053609264040e47691ec44f6de07a8af
   RNNotifee: 935f3ea8c134c88cbf8b13ea0c97c72c09ad2116
   RNScreens: 177a3fedd12fc8d12af3c23f17e7bbdc9749a2cd
-  RNSVG: 763199e06f021b4dd5c47685bb42404c3f10ca49
+  RNSVG: d00c8f91c3cbf6d476451313a18f04d220d4f396
   SocketRocket: abac6f5de4d4d62d24e11868d7a2f427e0ef940d
   Yoga: 2f71ecf38d934aecb366e686278102a51679c308
 
