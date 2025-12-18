@@ -1,5 +1,5 @@
 import { Button, FormControl, Input, NativeBaseProvider, ScrollView } from 'native-base';
-import { Dimensions, Image, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Dimensions, Image, Platform, Pressable, StyleSheet, Text, View } from 'react-native';
 import GlobalStyles, { ThemeColors } from '../lib/GlobalStyles';
 import { Utility } from '../lib/Utility';
 import { UserProfile } from '../lib/models/UserProfile';
@@ -58,8 +58,10 @@ const LoginScreen = ({ navigation, route }: any) => {
         });
         versionFileJson = await jsonPromise.json();
         console.log(versionFileJson);
-        console.log(`${appVersion} < ${versionFileJson.ios.min_supported_version}? ${appVersion < versionFileJson.ios.min_supported_version}`);
-        doesAppNeedUpdate = appVersion < versionFileJson.ios.min_supported_version;
+        const minVersionToCheck = Utility.IsIOS() ? versionFileJson.ios.min_supported_version : versionFileJson.android.min_supported_version;
+        console.log(`${appVersion} < ${minVersionToCheck}? ${appVersion < minVersionToCheck}`);
+        console.log(`Version to check: ${minVersionToCheck}`);
+        doesAppNeedUpdate = appVersion < minVersionToCheck;
         console.log("Does app need updated? ", doesAppNeedUpdate);
       } catch (err) {
         console.log("Errore while fetching", err);

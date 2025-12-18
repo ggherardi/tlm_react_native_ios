@@ -6,6 +6,7 @@ import { showMessage } from 'react-native-flash-message';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { ThemeColors } from './GlobalStyles';
 import { ExpenseReport } from './models/ExpenseReport';
+import { Platform } from "react-native";
 
 export const Utility = {
   SortByDate: (array: any[], fieldToSort: string, ascending: boolean = true) => {
@@ -220,5 +221,9 @@ export const Utility = {
   SwipableHint: (swipableRef: any) => {
     swipableRef.current?.openRight();
     setTimeout(() => swipableRef.current?.close(), 400);
+  },
+
+  IsIOS: (): boolean => {
+    return Platform.OS == "ios";
   }
 }

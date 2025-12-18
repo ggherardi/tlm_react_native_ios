@@ -3,6 +3,7 @@ import { Image, SafeAreaView, StyleSheet, Text, View, Linking, Pressable } from 
 import { Images } from '../assets/Images';
 import { ThemeColors } from '../lib/GlobalStyles';
 import { VersionFile } from '../lib/models/VersionFile';
+import { Utility } from '../lib/Utility';
 
 type UpdateAppProps = {
   navigation: any;
@@ -18,12 +19,18 @@ const UpdateApp = ({ navigation, route }: UpdateAppProps) => {
   const message =
     route?.params?.message ??
     'È disponibile una nuova versione. Aggiorna l’app per continuare a utilizzare tutte le funzionalità.';
-  const storeUrl = route.params?.versionFile?.ios?.store_url;
-
+  const storeUrl = Utility.IsIOS()
+    ? route.params?.versionFile?.ios?.store_url
+    : route.params?.versionFile?.android?.store_url;
   useEffect(() => {
     // Hide header and disable gestures so the user cannot leave this screen.
     navigation?.setOptions?.({ headerShown: false, gestureEnabled: false });
   }, [navigation]);
+
+  const GoToStore = (internalStoreUrl: string) => {
+    console.log("Clicking");
+    Linking.openURL(internalStoreUrl);
+  }
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -35,7 +42,7 @@ const UpdateApp = ({ navigation, route }: UpdateAppProps) => {
           <Text style={styles.title}>Aggiorna l’app</Text>
           <Text style={styles.message}>{message}</Text>
           {storeUrl ? (
-            <Pressable style={styles.button} onPress={() => Linking.openURL(storeUrl)}>
+            <Pressable style={styles.button} onPress={() => console.log("CIAO")}>
               <Text style={styles.buttonText}>Vai allo Store</Text>
             </Pressable>
           ) : null}

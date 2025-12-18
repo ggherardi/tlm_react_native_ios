@@ -28,7 +28,7 @@ export const ExpenseDataRowComponent = ({ expense: expense, event, onDelete, ind
 
     const getDocumentDir = async () => {
         const documentDir = await FileManager.getDocumentDir();
-        setImageUri(`${documentDir}/${expense.photoFilePath}`);
+        setImageUri(`file:///${documentDir}/${expense.photoFilePath}`);
         console.log(`DocumentDir: ${documentDir}`);
         console.log(`DocumentDir ls: ${(await FileManager.ls(documentDir)).map(a => a.name)}`);
         console.log(`ExpensephotoFilePath: ${expense.photoFilePath}`);
@@ -77,7 +77,7 @@ export const ExpenseDataRowComponent = ({ expense: expense, event, onDelete, ind
                     <Row style={[GlobalStyles.pt5]}>
                         <View style={[styles.expenseImageContainer]}>
                             {Utility.IsNotNullOrUndefined(expense.photoFilePath) && Utility.IsNotNullOrUndefined(imageUri) && (
-                                <Image alt='noimage' source={{ uri: "file:///"+imageUri }} style={[styles.image]} />
+                                <Image alt='noimage' source={{ uri: imageUri }} style={[styles.image]} />
                             )}
                         </View>
                         <View style={[styles.expenseNameContainer]}>
