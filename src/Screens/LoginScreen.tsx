@@ -8,9 +8,11 @@ import dataContext from '../lib/models/DataContext';
 import LoginInputComponent from '../lib/components/LoginInputComponent';
 import { Images } from '../assets/Images';
 import { Constants } from '../lib/Constants';
+import { SaveConstants, Storage } from '../lib/DataStorage';
 import LoaderComponent, { LoaderSize } from '../lib/components/LoaderComponent';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { VersionFile } from '../lib/models/VersionFile';
+import { VersionData } from '../lib/models/VersionData';
 
 const appVersion: string = require('../../package.json').version;
 
@@ -49,6 +51,21 @@ const LoginScreen = ({ navigation, route }: any) => {
           changelog: [],
         },
       };
+
+      const needsUpdateOffline = (versionFile: VersionFile): boolean => {
+        if (!versionFile) {
+          return false;
+        }
+        const minVersionToCheck = Utility.IsIOS() ? versionFile.ios.min_supported_version : versionFile.android.min_supported_version;
+        return appVersion < minVersionToCheck;
+      };
+
+      const versionData: VersionData = Utility.GetVersionData();
+      if (needsUpdateOffline(versionData.versionFile)) {
+        navigation.replace(Constants.Navigation.UpdateApp, { versionFile: versionData.versionFile });
+        return;
+      }
+
       try {
         const versionFileUrl = !__DEV__ ? Constants.VersionCheck.VersionFileUrl : Constants.VersionCheck.VersionFileUrlDebug;
         console.log("VersionFileUrl: ", versionFileUrl);
@@ -57,6 +74,7 @@ const LoginScreen = ({ navigation, route }: any) => {
           headers: { Accept: 'application/json' }, 
         });
         versionFileJson = await jsonPromise.json();
+        Storage.save(SaveConstants.versionFile.key, 'versionFile', versionFileJson);
         console.log(versionFileJson);
         const minVersionToCheck = Utility.IsIOS() ? versionFileJson.ios.min_supported_version : versionFileJson.android.min_supported_version;
         console.log(`${appVersion} < ${minVersionToCheck}? ${appVersion < minVersionToCheck}`);

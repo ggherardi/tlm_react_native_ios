@@ -26,6 +26,9 @@ export default class DataStorage {
         case 'array':
           value = JSON.stringify(value);
           break;
+        case 'json':
+          value = JSON.stringify(value);
+          break;
         default:
           break;
       }
@@ -80,5 +83,9 @@ export const SaveConstants = {
   userProfile: {
     key: 'userProfile',
     dataType: 'array'
+  },
+  versionFile: {
+    key: 'versionFile',
+    dataType: 'json'
   }
 };
