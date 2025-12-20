@@ -1,10 +1,8 @@
-TODO:
+Instructions for PlayStore
 
-- TLM Logo is white on grey background
-OK - Datepicker is grey on grey background
-OK - Button in Login screen is ugly
-
-
+- increase version code and version name in build.gradle
+- gradlew /clean
+- npx react-native build-android --mode=release
 
 This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
 

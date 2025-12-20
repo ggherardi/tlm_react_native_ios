@@ -3,11 +3,13 @@ import { BusinessDataTypeBase } from "./BusinessDataTypeBase";
 import { BusinessEvent } from "./BusinessEvent";
 import { ExpenseReport } from "./ExpenseReport";
 import { UserProfile } from './UserProfile';
+import { VersionData } from "./VersionData";
 
 class DataContext {
     Events: DataSet<BusinessEvent> = new DataSet<BusinessEvent>(SaveConstants.events.key, BusinessEvent);
     UserProfile: DataSet<UserProfile> = new DataSet<UserProfile>(SaveConstants.userProfile.key, UserProfile);
     ExpenseReports!: DataSet<ExpenseReport>;
+    Version: DataSet<VersionData> = new DataSet<VersionData>(SaveConstants.versionFile.key, VersionData);
 
     setExpenseReportsKey = (storageKey: string) => {
         this.ExpenseReports = new DataSet<ExpenseReport>(storageKey, ExpenseReport);

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, version } from "react";
 import { UserProfile } from './models/UserProfile';
 import dataContext from './models/DataContext';
 import { BusinessEvent } from './models/BusinessEvent';
@@ -6,6 +6,8 @@ import { showMessage } from 'react-native-flash-message';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { ThemeColors } from './GlobalStyles';
 import { ExpenseReport } from './models/ExpenseReport';
+import { Platform } from "react-native";
+import { VersionData } from "./models/VersionData";
 
 export const Utility = {
   SortByDate: (array: any[], fieldToSort: string, ascending: boolean = true) => {
@@ -36,6 +38,15 @@ export const Utility = {
       userProfile = userProfileAllData[0];
     }
     return userProfile || new UserProfile;
+  },
+
+  GetVersionData: (): VersionData => {
+    let versionData;
+    const versionDataAllData = dataContext.Version.getAllData();
+    if (versionDataAllData && versionDataAllData.length) {
+      versionData = versionDataAllData[0];
+    }
+    return versionData || new VersionData;
   },
 
   GetEventHeaderTitle: (event: BusinessEvent) => {
@@ -220,5 +231,9 @@ export const Utility = {
   SwipableHint: (swipableRef: any) => {
     swipableRef.current?.openRight();
     setTimeout(() => swipableRef.current?.close(), 400);
+  },
+
+  IsIOS: (): boolean => {
+    return Platform.OS == "ios";
   }
 }

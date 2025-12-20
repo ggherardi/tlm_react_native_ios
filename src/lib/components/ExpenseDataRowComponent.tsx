@@ -28,7 +28,10 @@ export const ExpenseDataRowComponent = ({ expense: expense, event, onDelete, ind
 
     const getDocumentDir = async () => {
         const documentDir = await FileManager.getDocumentDir();
-        setImageUri(`${documentDir}/${expense.photoFilePath}`);
+        setImageUri(`file:///${documentDir}/${expense.photoFilePath}`);
+        console.log(`DocumentDir: ${documentDir}`);
+        console.log(`DocumentDir ls: ${(await FileManager.ls(documentDir)).map(a => a.name)}`);
+        console.log(`ExpensephotoFilePath: ${expense.photoFilePath}`);
     }
 
     useEffect(() => {

@@ -27,7 +27,7 @@ import LoginScreen from './src/Screens/LoginScreen';
 import NotificationManager from './src/lib/NotificationManager';
 // import DebugScreen from './src/Screens/DebugScreen';
 import RefundKmScreen from './src/Screens/RefundKmScreen';
-import UpdateApp from './src/Screens/UpdateApp';
+import UpdateApp from './src/Screens/UpdateAppScreen';
 
 library.add(fab, faSquareCheck, faBeerMugEmpty, faCalendar, faCalendarDay, faTrash, faPlus,
   faCalendarWeek, faTable, faTableCells, faTableList, faTableColumns, faTableCellsLarge, faTableTennis,
