@@ -33,7 +33,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "tlm_react_native_iosTests.xctest"
+               BuildableName = "tlm_react_native_iosTests"
                BlueprintName = "tlm_react_native_iosTests"
                ReferencedContainer = "container:tlm_react_native_ios.xcodeproj">
             </BuildableReference>
