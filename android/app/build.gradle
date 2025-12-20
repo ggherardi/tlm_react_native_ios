@@ -79,8 +79,8 @@ android {
         applicationId "com.tlmexpenses"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 9
-        versionName "1.8"
+        versionCode 10
+        versionName "2.0"
     }
     signingConfigs {
         release {
@@ -108,6 +108,13 @@ android {
             signingConfig signingConfigs.release
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+        }
+    }
+
+    packagingOptions {
+        jniLibs {
+            // Ensure native libs are uncompressed and properly aligned (required for 16KB page support).
+            useLegacyPackaging false
         }
     }
 }
