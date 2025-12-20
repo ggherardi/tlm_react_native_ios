@@ -28,7 +28,6 @@ const UpdateApp = ({ navigation, route }: UpdateAppProps) => {
   }, [navigation]);
 
   const GoToStore = (internalStoreUrl: string) => {
-    console.log("Clicking");
     Linking.openURL(internalStoreUrl);
   }
 
@@ -42,7 +41,7 @@ const UpdateApp = ({ navigation, route }: UpdateAppProps) => {
           <Text style={styles.title}>Aggiorna l’app</Text>
           <Text style={styles.message}>{message}</Text>
           {storeUrl ? (
-            <Pressable style={styles.button} onPress={() => console.log("CIAO")}>
+            <Pressable style={styles.button} onPress={() => GoToStore(storeUrl)}>
               <Text style={styles.buttonText}>Vai allo Store</Text>
             </Pressable>
           ) : null}

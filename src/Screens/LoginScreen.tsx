@@ -53,11 +53,13 @@ const LoginScreen = ({ navigation, route }: any) => {
       };
 
       const needsUpdateOffline = (versionFile: VersionFile): boolean => {
+        console.log("Checking if log file exists: ", versionFile);
         if (!versionFile) {
           return false;
         }
         const minVersionToCheck = Utility.IsIOS() ? versionFile.ios.min_supported_version : versionFile.android.min_supported_version;
-        return appVersion < minVersionToCheck;
+        console.log(`appVersion: ${appVersion}, minVersionToCheck: ${minVersionToCheck}, appVersion < minVersionToCheck: ${appVersion < minVersionToCheck}`);
+        return Number(appVersion) < Number(minVersionToCheck);
       };
 
       const versionData: VersionData = Utility.GetVersionData();
@@ -74,12 +76,15 @@ const LoginScreen = ({ navigation, route }: any) => {
           headers: { Accept: 'application/json' }, 
         });
         versionFileJson = await jsonPromise.json();
-        Storage.save(SaveConstants.versionFile.key, 'versionFile', versionFileJson);
+        const versionData = new VersionData();
+        versionData.id = 1;
+        versionData.versionFile = versionFileJson;
+        dataContext.Version.saveData([versionData]);
         console.log(versionFileJson);
         const minVersionToCheck = Utility.IsIOS() ? versionFileJson.ios.min_supported_version : versionFileJson.android.min_supported_version;
         console.log(`${appVersion} < ${minVersionToCheck}? ${appVersion < minVersionToCheck}`);
         console.log(`Version to check: ${minVersionToCheck}`);
-        doesAppNeedUpdate = appVersion < minVersionToCheck;
+        doesAppNeedUpdate = Number(appVersion) < Number(minVersionToCheck);
         console.log("Does app need updated? ", doesAppNeedUpdate);
       } catch (err) {
         console.log("Errore while fetching", err);
