@@ -172,9 +172,10 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
                 expense.amount = Number(expenseAmount);
                 expense.date = (expenseDate as Date).toString();
                 expense.timeStamp = new Date().toString();
+                const documentDir = await FileManager.getDocumentDir();
                 const photoFileName = `${Utility.SanitizeString(event.name)}-${Utility.SanitizeString(expense.name)}-${Utility.FormatDateDDMMYYYY(expense.date, '-')}-${Utility.GenerateRandomGuid("")}.${Utility.GetExtensionFromType(photo.type)}`;
                 const photoLeafFilePath = `${event.directoryPath}/${photoFileName}`;
-                const photoFullFilePath = `${await FileManager.getDocumentDir()}/${photoLeafFilePath}`;
+                const photoFullFilePath = `${documentDir}/${photoLeafFilePath}`;
                 let operationResult;
                 if (photo.base64) {
                     operationResult = await FileManager.saveFromBase64(photoFullFilePath, photo.base64);
@@ -183,7 +184,9 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
                     let resizeOperation;
                     try {
                         console.log(scannedImageToDelete.uri, event.directoryPath);
-                        resizeOperation = await FileManager.resizeImage(scannedImageToDelete.uri, event.directoryPath, 800, 600);
+                        const scannedImagePath = scannedImageToDelete.uri.startsWith("file://") ? scannedImageToDelete.uri.replace("file://", "") : scannedImageToDelete.uri;
+                        const resizeOutputDirectory = `${documentDir}${event.directoryPath}`;
+                        resizeOperation = await FileManager.resizeImage(scannedImagePath, resizeOutputDirectory, 800, 600);
                         console.log("Resize operation successful: ", resizeOperation);
                     } catch (err) {
                         console.log("error");
@@ -192,8 +195,9 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
                     }
                     // GG: If the resize was successful, we now need to move the resized image to the event folder while renaming it
                     if (resizeOperation) {
-                        console.log("Moving and renaming image from resizeOperation.path: ", resizeOperation.path, " to photoFileFullPath: ", photoFullFilePath);
-                        operationResult = await FileManager.moveFile(resizeOperation.path, photoFullFilePath);
+                        const resizedImagePath = resizeOperation.path.startsWith("file://") ? resizeOperation.path.replace("file://", "") : resizeOperation.path;
+                        console.log("Moving and renaming image from resizeOperation.path: ", resizedImagePath, " to photoFileFullPath: ", photoFullFilePath);
+                        operationResult = await FileManager.moveFile(resizedImagePath, photoFullFilePath);
                     }
                 }
                 if (operationResult) {

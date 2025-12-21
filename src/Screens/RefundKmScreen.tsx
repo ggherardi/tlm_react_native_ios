@@ -89,23 +89,23 @@ const RefundKmScreen = ({ navigation, route }: any) => {
       <ModalLoaderComponent isLoading={isLoading} text='Modifica evento in corso..' />
       <ScrollView contentContainerStyle={styles.container}>
         <FormControl style={GlobalStyles.mt15}>
-          <Checkbox value="Rimborso chilometrico" defaultIsChecked={needCarRefund} onChange={(e) => setNeedCarRefund(e)}>Rimborso chilometrico</Checkbox>
+          <Checkbox value="Rimborso chilometrico" defaultIsChecked={needCarRefund} onChange={setNeedCarRefund}>Rimborso chilometrico</Checkbox>
         </FormControl>
         {needCarRefund && (
           <View>
             <FormControl style={GlobalStyles.mt15} isRequired isInvalid={'startingCity' in validationErrors}>
               <FormControl.Label>Località di partenza (città)</FormControl.Label>
-              <Input defaultValue={event.refundStartingCity} placeholder="es. Roma" onChange={(e) => setStartingCity(e.nativeEvent.text)}></Input>
+              <Input defaultValue={event.refundStartingCity} placeholder="es. Roma" onChange={setStartingCity}></Input>
               <FormErrorMessageComponent text='Campo obbligatorio' field='startingCity' validationArray={validationErrors} />
             </FormControl>
             <FormControl style={GlobalStyles.mt15} isRequired isInvalid={'arrivalCity' in validationErrors}>
               <FormControl.Label>Località di arrivo (città)</FormControl.Label>
-              <Input defaultValue={event.refundArrivalCity} placeholder="es. Firenze" onChange={(e) => setArrivalCity(e.nativeEvent.text)}></Input>
+              <Input defaultValue={event.refundArrivalCity} placeholder="es. Firenze" onChange={setArrivalCity}></Input>
               <FormErrorMessageComponent text='Campo obbligatorio' field='arrivalCity' validationArray={validationErrors} />
             </FormControl>
             <FormControl style={GlobalStyles.mt15} isRequired isInvalid={'totalTravelledKms' in validationErrors}>
               <FormControl.Label>Totale KM percorsi</FormControl.Label>
-              <InputNumber defaultValue={event.totalTravelledKms} placeholder="es. 35.8" onChange={(e: any) => setTotalTravelledKms(e.nativeEvent.text)}></InputNumber>
+              <InputNumber defaultValue={event.totalTravelledKms} placeholder="es. 35.8" onChange={setTotalTravelledKms}></InputNumber>
               <FormErrorMessageComponent text='Campo obbligatorio' field='totalTravelledKms' validationArray={validationErrors} />
             </FormControl>
             <FormControl style={GlobalStyles.mt15} isRequired isInvalid={'travelDate' in validationErrors}>
