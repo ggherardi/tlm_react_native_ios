@@ -341,7 +341,7 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
                         </FormControl>
                         <FormControl style={GlobalStyles.mt15} isRequired={expenseName == "altro"} isInvalid={'expenseDescription' in validationErrors}>
                             <FormControl.Label>Descrizione della spesa</FormControl.Label>
-                            <TextArea placeholder="es. Taxi per trasferimento aeroporto" onChange={handleExpenseDescriptionChange} autoCompleteType={true} isInvalid={'expenseDescription' in validationErrors} onFocus={scrollToY}></TextArea>
+                            <TextArea placeholder="es. Taxi per trasferimento aeroporto" onChange={handleExpenseDescriptionChange} autoCompleteType={true} isInvalid={'expenseDescription' in validationErrors} onFocus={scrollToY} tvParallaxProperties={undefined} onTextInput={undefined}></TextArea>
                             <FormErrorMessageComponent text='Campo obbligatorio con voce "altro" selezionata' field='expenseDescription' validationArray={validationErrors} />
                         </FormControl>
                     </View>

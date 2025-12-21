@@ -1,25 +1,46 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-type Primitive = string | number | boolean | null;
-type Storable = Primitive | object;
-
 export default class DataStorage {
   private cache = new Map<string, string>();
+  private initialized = false;
+  private initPromise: Promise<void> | null = null;
+
+  constructor() {
+    // Fire-and-forget to inizializzare la cache il prima possibile.
+    // App.tsx richiama comunque init() in modo await, quindi qui è safe.
+    void this.init();
+  }
 
   /**
    * Va chiamato UNA SOLA VOLTA all'avvio dell'app.
    * Carica tutte le chiavi e popola la cache in memoria.
    */
   async init(): Promise<void> {
-    const keys = await AsyncStorage.getAllKeys();
-    if (!keys?.length) return;
-
-    const pairs = await AsyncStorage.multiGet(keys);
-    this.cache.clear();
-
-    for (const [k, v] of pairs) {
-      if (k && v != null) this.cache.set(k, v);
+    if (this.initialized && !this.initPromise) {
+      return;
     }
+    if (this.initPromise) {
+      return this.initPromise;
+    }
+    this.initPromise = (async () => {
+      const keys = await AsyncStorage.getAllKeys();
+      if (!keys?.length) {
+        this.cache.clear();
+        this.initialized = true;
+        this.initPromise = null;
+        return;
+      }
+
+      const pairs = await AsyncStorage.multiGet(keys);
+      this.cache.clear();
+
+      for (const [k, v] of pairs) {
+        if (k && v != null) this.cache.set(k, v);
+      }
+      this.initialized = true;
+      this.initPromise = null;
+    })();
+    return this.initPromise;
   }
 
   getAll = (): string[] => {
