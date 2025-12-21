@@ -1,7 +1,7 @@
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { FormControl, HStack, Input, NativeBaseProvider, Select, TextArea } from '@gluestack-ui/themed-native-base';
+import { FormControl, HStack, Input, NativeBaseProvider, TextArea } from '@gluestack-ui/themed-native-base';
 import { useEffect, useRef, useState } from 'react';
-import React, { Alert, Image, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, View } from 'react-native';
+import React, { Alert, Image, KeyboardAvoidingView, Modal, Platform, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import GlobalStyles, { ThemeColors } from '../lib/GlobalStyles';
 import { Utility } from '../lib/Utility';
 import { InputSideButton } from '../lib/components/InputSideButtonComponent';
@@ -20,8 +20,6 @@ import ModalLoaderComponent from '../lib/components/ModalWithLoader';
 import { FormErrorMessageComponent } from '../lib/components/FormErrorMessageComponent';
 import DocumentScanner, { ResponseType } from 'react-native-document-scanner-plugin'
 import MlkitOcr from 'react-native-mlkit-ocr';
-import { SelectBackdrop, SelectContent, SelectIcon, SelectInput, SelectItem, SelectPortal, SelectTrigger } from '@gluestack-ui/themed';
-
 const NewExpenseReportScreen = ({ route, navigation }: any) => {
     const [expenses, setExpenses] = useState(dataContext.ExpenseReports.getAllData())
     const [expenseName, setExpenseName] = useState('');
@@ -36,6 +34,7 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
     const [isFormValid, setIsFormValid] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [validationErrors, setValidationErrors] = useState({});
+    const [pickerOpen, setPickerOpen] = useState(false);
     const scrollViewRef = useRef<ScrollView>(null);
 
     const event: BusinessEvent = route.params.event;
@@ -289,44 +288,39 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
                             <FormControl style={GlobalStyles.mt15} isRequired isInvalid={'expenseName' in validationErrors}>
                                 <FormControl.Label>Titolo spesa</FormControl.Label>
                             </FormControl>
-                            <ScrollView horizontal={true} contentContainerStyle={{ flexGrow: 1 }} scrollEnabled={false}>
-                                <View style={{ width: '100%' }}>
-
-                                    {/* <Select
-                                        selectedValue={expenseName}
-                                        onValueChange={(item: any) => setExpenseName(item)}>
-                                        <SelectTrigger
-                                            width="100%"
-                                            borderColor={
-                                                'expenseName' in validationErrors ? 'red.500' : 'gray.300'
-                                            }>
-                                            <SelectInput placeholder="Selezionare una voce" />
-                                            <SelectIcon />
-                                        </SelectTrigger>
-
-                                        <SelectPortal>
-                                            <SelectBackdrop />
-                                            <SelectContent>
-                                                {expenseItems !== undefined &&
-                                                    expenseItems.length > 0 &&
-                                                    expenseItems.map((item) => (
-                                                        <SelectItem
-                                                            key={item}
-                                                            label={item}
-                                                            value={item}
-                                                        />
-                                                    ))}
-                                            </SelectContent>
-                                        </SelectPortal>
-                                    </Select> */}
-                                    <Select
-                                    width={"100%"} onValueChange={(item: any) => { setExpenseName(item); console.log("Setting expenseItemName ", item) }} selectedValue={expenseName} borderColor={'expenseName' in validationErrors ? 'red.500' : 'gray.300'} placeholder='Selezionare una voce'>
-                                    {expenseItems != undefined && expenseItems.length > 0 && expenseItems.map(item => (
-                                        <Select.Item key={item} label={item} value={item} />
-                                    ))}
-                                </Select>
-                                </View>
-                            </ScrollView>
+                            <View style={{ width: '100%' }}>
+                                <Pressable
+                                    onPress={() => setPickerOpen(true)}
+                                    style={[
+                                        styles.pickerContainer,
+                                        { borderColor: 'expenseName' in validationErrors ? 'red' : '#d1d5db' }
+                                    ]}
+                                >
+                                    <Text style={[styles.pickerText, { color: expenseName ? '#000' : '#9ca3af' }]}>
+                                        {expenseName || 'Selezionare una voce'}
+                                    </Text>
+                                </Pressable>
+                            </View>
+                            <Modal transparent visible={pickerOpen} animationType="fade" onRequestClose={() => setPickerOpen(false)}>
+                                <TouchableOpacity style={styles.modalBackdrop} activeOpacity={1} onPressOut={() => setPickerOpen(false)}>
+                                    <View style={styles.modalSheet}>
+                                        <ScrollView>
+                                            {expenseItems !== undefined && expenseItems.length > 0 && expenseItems.map((item) => (
+                                                <Pressable
+                                                    key={item}
+                                                    style={styles.modalItem}
+                                                    onPress={() => {
+                                                        setExpenseName(item);
+                                                        setPickerOpen(false);
+                                                    }}
+                                                >
+                                                    <Text style={styles.modalItemText}>{item}</Text>
+                                                </Pressable>
+                                            ))}
+                                        </ScrollView>
+                                    </View>
+                                </TouchableOpacity>
+                            </Modal>
                             <FormErrorMessageComponent text='Campo obbligatorio' field='expenseName' validationArray={validationErrors} />
 
                             <FormControl style={GlobalStyles.mt15} isRequired isInvalid={'expenseAmount' in validationErrors}>
@@ -401,6 +395,36 @@ const styles = StyleSheet.create({
         marginRight: 10
         // marginTop: 30,
         // borderRadius: 10,
+    },
+    pickerContainer: {
+        borderWidth: 1,
+        borderRadius: 6,
+        height: 48,
+        justifyContent: 'center',
+        backgroundColor: '#fff',
+        paddingHorizontal: 12
+    },
+    pickerText: {
+        fontSize: 16
+    },
+    modalBackdrop: {
+        flex: 1,
+        backgroundColor: 'rgba(0,0,0,0.3)',
+        justifyContent: 'flex-end'
+    },
+    modalSheet: {
+        backgroundColor: '#fff',
+        paddingVertical: 12,
+        borderTopLeftRadius: 12,
+        borderTopRightRadius: 12,
+        maxHeight: '50%'
+    },
+    modalItem: {
+        paddingVertical: 12,
+        paddingHorizontal: 16
+    },
+    modalItemText: {
+        fontSize: 16
     },
 });
 

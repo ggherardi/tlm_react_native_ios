@@ -28,6 +28,8 @@ import NotificationManager from './src/lib/NotificationManager';
 // import DebugScreen from './src/Screens/DebugScreen';
 import RefundKmScreen from './src/Screens/RefundKmScreen';
 import UpdateApp from './src/Screens/UpdateAppScreen';
+import { GluestackUIProvider } from '@gluestack-ui/themed-native-base';
+import { config } from '@gluestack-ui/config';
 
 library.add(fab, faSquareCheck, faBeerMugEmpty, faCalendar, faCalendarDay, faTrash, faPlus,
   faCalendarWeek, faTable, faTableCells, faTableList, faTableColumns, faTableCellsLarge, faTableTennis,
@@ -62,22 +64,24 @@ function App(): JSX.Element {
 
   return (
     <>
-      <NavigationContainer>
-        <Stack.Navigator>
-          {/* <Stack.Screen name={Constants.Navigation.DebugScreen} component={DebugScreen} options={commonOptions} /> */}
-          <Stack.Screen name={Constants.Navigation.LoginScreen} component={LoginScreen} options={loginScreenOptions} />
-          <Stack.Screen name={Constants.Navigation.Home} component={HomeScreen} options={commonOptions} />
-          <Stack.Screen name={Constants.Navigation.AllEvents} component={AllEventsScreen} options={commonOptions} />
-          <Stack.Screen name={Constants.Navigation.NewEvent} component={NewEventScreen} options={commonOptions} />
-          <Stack.Screen name={Constants.Navigation.EventHome} component={EventHomeScreen} options={commonOptions} />
-          <Stack.Screen name={Constants.Navigation.ViewPdf} component={ViewPdfScreen} options={commonOptions} />
-          <Stack.Screen name={Constants.Navigation.EditEventScreen} component={EditEventScreen} options={commonOptions} />
-          <Stack.Screen name={Constants.Navigation.RefundKmScreen} component={RefundKmScreen} options={commonOptions} />
-          <Stack.Screen name={Constants.Navigation.NewExpenseReport} component={NewExpenseReportScreen} options={commonOptions} />
-          <Stack.Screen name={Constants.Navigation.UpdateApp} component={UpdateApp} options={commonOptions} />
-        </Stack.Navigator>
-      </NavigationContainer>
-      <FlashMessage position='top' />
+      <GluestackUIProvider config={config}>
+        <NavigationContainer>
+          <Stack.Navigator>
+            {/* <Stack.Screen name={Constants.Navigation.DebugScreen} component={DebugScreen} options={commonOptions} /> */}
+            <Stack.Screen name={Constants.Navigation.LoginScreen} component={LoginScreen} options={loginScreenOptions} />
+            <Stack.Screen name={Constants.Navigation.Home} component={HomeScreen} options={commonOptions} />
+            <Stack.Screen name={Constants.Navigation.AllEvents} component={AllEventsScreen} options={commonOptions} />
+            <Stack.Screen name={Constants.Navigation.NewEvent} component={NewEventScreen} options={commonOptions} />
+            <Stack.Screen name={Constants.Navigation.EventHome} component={EventHomeScreen} options={commonOptions} />
+            <Stack.Screen name={Constants.Navigation.ViewPdf} component={ViewPdfScreen} options={commonOptions} />
+            <Stack.Screen name={Constants.Navigation.EditEventScreen} component={EditEventScreen} options={commonOptions} />
+            <Stack.Screen name={Constants.Navigation.RefundKmScreen} component={RefundKmScreen} options={commonOptions} />
+            <Stack.Screen name={Constants.Navigation.NewExpenseReport} component={NewExpenseReportScreen} options={commonOptions} />
+            <Stack.Screen name={Constants.Navigation.UpdateApp} component={UpdateApp} options={commonOptions} />
+          </Stack.Navigator>
+        </NavigationContainer>
+        <FlashMessage position='top' />
+      </GluestackUIProvider>
     </>
   );
 }
