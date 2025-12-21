@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { ExpenseReport } from '../models/ExpenseReport';
 import { Pressable, StyleSheet, Text, Alert, Animated, View, TouchableOpacity, TouchableHighlight, I18nManager } from 'react-native';
-import { HStack, Image, Row, VStack } from 'native-base';
+import { HStack, Image, Row, VStack } from '@gluestack-ui/themed-native-base';
 import { Utility } from '../Utility';
 import { GestureHandlerRootView, Swipeable } from 'react-native-gesture-handler';
 import dataContext from '../models/DataContext';

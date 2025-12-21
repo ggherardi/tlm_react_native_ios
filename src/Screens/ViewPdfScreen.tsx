@@ -1,4 +1,4 @@
-import { NativeBaseProvider } from 'native-base';
+import { NativeBaseProvider } from '@gluestack-ui/themed-native-base';
 import React from 'react';
 import { Dimensions, StyleSheet, View } from 'react-native';
 import { BusinessEvent } from '../lib/models/BusinessEvent';

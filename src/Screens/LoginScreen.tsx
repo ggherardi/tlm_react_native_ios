@@ -1,4 +1,4 @@
-import { Button, FormControl, Input, NativeBaseProvider, ScrollView } from 'native-base';
+import { Button, FormControl, Input, NativeBaseProvider, ScrollView } from '@gluestack-ui/themed-native-base';
 import { Dimensions, Image, Platform, Pressable, StyleSheet, Text, View } from 'react-native';
 import GlobalStyles, { ThemeColors } from '../lib/GlobalStyles';
 import { Utility } from '../lib/Utility';
@@ -150,13 +150,13 @@ const LoginScreen = ({ navigation, route }: any) => {
         <View>
           <Text style={[{ display: showInfo ? 'flex' : 'none' }, styles.descriptionText]}>Inserire nome e cognome che verranno visualizzati da TLM quando verrà inviata la nota spese. Sarà sempre possibile cambiarli dalle impostazioni.</Text>
           <FormControl style={GlobalStyles.mt15} isRequired isInvalid={"name" in validationErrors}>
-            <LoginInputComponent defaultValue={name} placeholder='nome*' onChange={(e: any) => setName(e.nativeEvent.text)} borderColor={"name" in validationErrors ? 'red.500' : 'gray.300'} />
+            <LoginInputComponent defaultValue={name} placeholder='nome*' onChange={setName} borderColor={"name" in validationErrors ? 'red.500' : 'gray.300'} />
           </FormControl>
           <FormControl style={GlobalStyles.mt15} isRequired isInvalid={"surname" in validationErrors}>
-            <LoginInputComponent defaultValue={surname} placeholder='cognome*' onChange={(e: any) => setSurname(e.nativeEvent.text)} borderColor={"surname" in validationErrors ? 'red.500' : 'gray.300'} />
+            <LoginInputComponent defaultValue={surname} placeholder='cognome*' onChange={setSurname} borderColor={"surname" in validationErrors ? 'red.500' : 'gray.300'} />
           </FormControl>
           {/* <FormControl style={GlobalStyles.mt15} isRequired isInvalid={"email" in validationErrors}>
-            <LoginInputComponent defaultValue={email} placeholder='email*' onChange={(e: any) => setEmail(e.nativeEvent.text)} keyboardType='email-address' borderColor={"email" in validationErrors ? 'red.500' : 'gray.300'} />
+            <LoginInputComponent defaultValue={email} placeholder='email*' onChange={setEmail} keyboardType='email-address' borderColor={"email" in validationErrors ? 'red.500' : 'gray.300'} />
           </FormControl> */}
           <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', gap: 10 }}>
             <Pressable style={({ pressed }) => [{ opacity: pressed ? 0.2 : 1, flex: 1 }, styles.buttonContainer, GlobalStyles.mt15]} onPress={() => setShowInfo(!showInfo)}>

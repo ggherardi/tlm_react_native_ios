@@ -1,4 +1,4 @@
-import { Input } from 'native-base';
+import { Input } from '@gluestack-ui/themed-native-base';
 import React, { useState } from 'react';
 
 interface IInputNumber {
@@ -12,14 +12,14 @@ interface IInputNumber {
 export const InputNumber = (config: IInputNumber) => {
     const [currentValue, setCurrentValue] = useState('');
     const validateNumber = (e: any) => {
-        const text = e.nativeEvent.text;
+        const text = e;
         const validRegex = /[^0-9.]/g;
         // GG: If text is not empty and all characters are valid (0-9 and including , for decimals)
         if (text && !text.match(validRegex)?.length) {
             setCurrentValue(text);
             config.onChange(e);            
         } else {
-            setCurrentValue(e.nativeEvent.text.replace(validRegex, ''));
+            setCurrentValue(e.replace(validRegex, ''));
         }
     };
 

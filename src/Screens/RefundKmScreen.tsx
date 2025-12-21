@@ -1,5 +1,5 @@
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { FormControl, Input, NativeBaseProvider, TextArea, Checkbox } from 'native-base';
+import { FormControl, Input, NativeBaseProvider, TextArea, Checkbox } from '@gluestack-ui/themed-native-base';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, ScrollView, View } from 'react-native';
 import { InputSideButton } from '../lib/components/InputSideButtonComponent';

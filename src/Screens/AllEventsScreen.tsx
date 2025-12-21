@@ -1,4 +1,4 @@
-import { Input, NativeBaseProvider } from 'native-base';
+import { Input, NativeBaseProvider } from '@gluestack-ui/themed-native-base';
 import React, { useState, useEffect } from 'react';
 import { Text, ScrollView, Alert, View, StyleSheet, Dimensions, Image, Pressable } from 'react-native';
 import GlobalStyles from '../lib/GlobalStyles';

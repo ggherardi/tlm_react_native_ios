@@ -1,4 +1,4 @@
-import { NativeBaseProvider, ScrollView } from 'native-base';
+import { NativeBaseProvider, ScrollView } from '@gluestack-ui/themed-native-base';
 import React, { StyleSheet, Text, View } from 'react-native';
 import GlobalStyles from '../lib/GlobalStyles';
 import { Utility } from '../lib/Utility';

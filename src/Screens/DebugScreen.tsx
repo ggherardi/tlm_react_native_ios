@@ -12,7 +12,7 @@
 // import ReactNativeBlobUtil, { ReactNativeBlobUtilStat } from 'react-native-blob-util';
 // import NavigationHelper from '../lib/NavigationHelper';
 // import { Constants } from '../lib/Constants';
-// import { Input, NativeBaseProvider } from 'native-base';
+// import { Input, NativeBaseProvider } from '@gluestack-ui/themed-native-base';
 // import { NativeBaseConfigProvider } from 'native-base/lib/typescript/core/NativeBaseContext';
 
 // // @ts-ignore

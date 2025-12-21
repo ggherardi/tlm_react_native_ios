@@ -1,5 +1,5 @@
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { FormControl, HStack, Input, NativeBaseProvider, Select, TextArea } from 'native-base';
+import { FormControl, HStack, Input, NativeBaseProvider, Select, TextArea } from '@gluestack-ui/themed-native-base';
 import { useEffect, useRef, useState } from 'react';
 import React, { Alert, Image, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, View } from 'react-native';
 import GlobalStyles, { ThemeColors } from '../lib/GlobalStyles';
@@ -20,6 +20,7 @@ import ModalLoaderComponent from '../lib/components/ModalWithLoader';
 import { FormErrorMessageComponent } from '../lib/components/FormErrorMessageComponent';
 import DocumentScanner, { ResponseType } from 'react-native-document-scanner-plugin'
 import MlkitOcr from 'react-native-mlkit-ocr';
+import { SelectBackdrop, SelectContent, SelectIcon, SelectInput, SelectItem, SelectPortal, SelectTrigger } from '@gluestack-ui/themed';
 
 const NewExpenseReportScreen = ({ route, navigation }: any) => {
     const [expenses, setExpenses] = useState(dataContext.ExpenseReports.getAllData())
@@ -56,8 +57,8 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
         "altro"
     ];
 
-    const handleExpenseDescriptionChange = (e: any) => setExpenseDescription(e.nativeEvent.text);
-    const handleExpenseAmount = (e: any) => setExpenseAmount(e.nativeEvent.text);
+    const handleExpenseDescriptionChange = (e: any) => setExpenseDescription(e);
+    const handleExpenseAmount = (e: any) => setExpenseAmount(e);
 
     const deletePhoto = () => setPhoto(undefined);
 
@@ -254,9 +255,9 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
 
     const scrollToY = () => {
         setTimeout(() => {
-          scrollViewRef.current?.scrollToEnd();
+            scrollViewRef.current?.scrollToEnd();
         }, 100);
-      }
+    }
 
     Utility.OnFocus({ navigation: navigation, onFocusAction: refreshData });
 
@@ -264,91 +265,119 @@ const NewExpenseReportScreen = ({ route, navigation }: any) => {
         <NativeBaseProvider>
             <ModalLoaderComponent isLoading={isLoading} text='Creazione spesa in corso..' />
             <KeyboardAvoidingView behavior={Platform.OS == 'ios' ? 'padding' : 'height'} keyboardVerticalOffset={100}>
-            <ScrollView ref={scrollViewRef} style={styles.container}>
-                <FormControl style={GlobalStyles.mt15} isRequired isDisabled>
-                    <FormControl.Label>Foto</FormControl.Label>
-                    <HStack style={[GlobalStyles.pt15]}>
-                        {photo != undefined && photo != null ? (
-                            <HStack>
-                                <Image source={{ uri: `${photo.uri ? photo.uri : photo.base64}` }} style={styles.image} resizeMode="contain"></Image>
-                                <InputSideButton icon={"x"} iconColor={ThemeColors.black} pressFunction={deletePhoto} />
-                            </HStack>
-                        ) : (
-                            <>
-                                <InputSideButton icon={"camera-retro"} iconColor={ThemeColors.black} pressFunction={onTakePhoto} />
-                                <InputSideButton icon={"images"} iconColor={ThemeColors.black} pressFunction={onSelectImagePress} />
-                                <InputSideButton icon={"car-side"} iconColor={ThemeColors.black} pressFunction={() => navigation.navigate(Constants.Navigation.RefundKmScreen, { event: event })} />
-                            </>
-                        )}
-                    </HStack>
-                </FormControl>
+                <ScrollView ref={scrollViewRef} style={styles.container}>
+                    <FormControl style={GlobalStyles.mt15} isRequired isDisabled>
+                        <FormControl.Label>Foto</FormControl.Label>
+                        <HStack style={[GlobalStyles.pt15]}>
+                            {photo != undefined && photo != null ? (
+                                <HStack>
+                                    <Image source={{ uri: `${photo.uri ? photo.uri : photo.base64}` }} style={styles.image} resizeMode="contain"></Image>
+                                    <InputSideButton icon={"x"} iconColor={ThemeColors.black} pressFunction={deletePhoto} />
+                                </HStack>
+                            ) : (
+                                <>
+                                    <InputSideButton icon={"camera-retro"} iconColor={ThemeColors.black} pressFunction={onTakePhoto} />
+                                    <InputSideButton icon={"images"} iconColor={ThemeColors.black} pressFunction={onSelectImagePress} />
+                                    <InputSideButton icon={"car-side"} iconColor={ThemeColors.black} pressFunction={() => navigation.navigate(Constants.Navigation.RefundKmScreen, { event: event })} />
+                                </>
+                            )}
+                        </HStack>
+                    </FormControl>
 
-                {photo ? (
-                    <View style={{ width: "100%" }}>
-                        <FormControl style={GlobalStyles.mt15} isRequired isInvalid={'expenseName' in validationErrors}>
-                            <FormControl.Label>Titolo spesa</FormControl.Label>
-                        </FormControl>
-                        <ScrollView horizontal={true} contentContainerStyle={{ flexGrow: 1 }} scrollEnabled={false}>
-                            <View style={{ width: '100%' }}>
-                                <Select
-                                    width={"100%"} onValueChange={(item) => setExpenseName(item)} selectedValue={expenseName} borderColor={'expenseName' in validationErrors ? 'red.500' : 'gray.300'} placeholder='Selezionare una voce'>
+                    {photo ? (
+                        <View style={{ width: "100%" }}>
+                            <FormControl style={GlobalStyles.mt15} isRequired isInvalid={'expenseName' in validationErrors}>
+                                <FormControl.Label>Titolo spesa</FormControl.Label>
+                            </FormControl>
+                            <ScrollView horizontal={true} contentContainerStyle={{ flexGrow: 1 }} scrollEnabled={false}>
+                                <View style={{ width: '100%' }}>
+
+                                    {/* <Select
+                                        selectedValue={expenseName}
+                                        onValueChange={(item: any) => setExpenseName(item)}>
+                                        <SelectTrigger
+                                            width="100%"
+                                            borderColor={
+                                                'expenseName' in validationErrors ? 'red.500' : 'gray.300'
+                                            }>
+                                            <SelectInput placeholder="Selezionare una voce" />
+                                            <SelectIcon />
+                                        </SelectTrigger>
+
+                                        <SelectPortal>
+                                            <SelectBackdrop />
+                                            <SelectContent>
+                                                {expenseItems !== undefined &&
+                                                    expenseItems.length > 0 &&
+                                                    expenseItems.map((item) => (
+                                                        <SelectItem
+                                                            key={item}
+                                                            label={item}
+                                                            value={item}
+                                                        />
+                                                    ))}
+                                            </SelectContent>
+                                        </SelectPortal>
+                                    </Select> */}
+                                    <Select
+                                    width={"100%"} onValueChange={(item: any) => { setExpenseName(item); console.log("Setting expenseItemName ", item) }} selectedValue={expenseName} borderColor={'expenseName' in validationErrors ? 'red.500' : 'gray.300'} placeholder='Selezionare una voce'>
                                     {expenseItems != undefined && expenseItems.length > 0 && expenseItems.map(item => (
                                         <Select.Item key={item} label={item} value={item} />
                                     ))}
                                 </Select>
-                            </View>
-                        </ScrollView>
-                        <FormErrorMessageComponent text='Campo obbligatorio' field='expenseName' validationArray={validationErrors} />
+                                </View>
+                            </ScrollView>
+                            <FormErrorMessageComponent text='Campo obbligatorio' field='expenseName' validationArray={validationErrors} />
 
-                        <FormControl style={GlobalStyles.mt15} isRequired isInvalid={'expenseAmount' in validationErrors}>
-                            <FormControl.Label>Importo della spesa ({event.mainCurrency.symbol})</FormControl.Label>
-                            <InputNumber defaultValue={guessedTotalAmount} placeholder='es. 50.5' onChange={handleExpenseAmount} isRequired={true} />
-                            <FormErrorMessageComponent text='Campo obbligatorio' field='expenseAmount' validationArray={validationErrors} />
-                        </FormControl>
+                            <FormControl style={GlobalStyles.mt15} isRequired isInvalid={'expenseAmount' in validationErrors}>
+                                <FormControl.Label>Importo della spesa ({event.mainCurrency.symbol})</FormControl.Label>
+                                <InputNumber defaultValue={guessedTotalAmount} placeholder='es. 50.5' onChange={handleExpenseAmount} isRequired={true} />
+                                <FormErrorMessageComponent text='Campo obbligatorio' field='expenseAmount' validationArray={validationErrors} />
+                            </FormControl>
 
-                        <FormControl style={GlobalStyles.mt15} isRequired isInvalid={'expenseDate' in validationErrors}>
-                            <FormControl.Label>Data della spesa</FormControl.Label>
-                            <Input
-                                caretHidden={true}
-                                showSoftInputOnFocus={false}
-                                placeholder="gg/mm/aaaa"
-                                onPressIn={() => setShowDateTimePicker(true)}
-                                value={expenseDate ? Utility.FormatDateDDMMYYYY(expenseDate.toString()) : ""}
-                                InputLeftElement={
-                                    <InputSideButton
-                                        icon="calendar-day"
-                                        iconStyle={GlobalStyles.iconPrimary}
-                                        pressFunction={() => {
-                                            setShowDateTimePicker(true);
+                            <FormControl style={GlobalStyles.mt15} isRequired isInvalid={'expenseDate' in validationErrors}>
+                                <FormControl.Label>Data della spesa</FormControl.Label>
+                                <Input
+                                    caretHidden={true}
+                                    showSoftInputOnFocus={false}
+                                    placeholder="gg/mm/aaaa"
+                                    onPressIn={() => setShowDateTimePicker(true)}
+                                    value={expenseDate ? Utility.FormatDateDDMMYYYY(expenseDate.toString()) : ""}
+                                    InputLeftElement={
+                                        <InputSideButton
+                                            icon="calendar-day"
+                                            iconStyle={GlobalStyles.iconPrimary}
+                                            pressFunction={() => {
+                                                setShowDateTimePicker(true);
+                                            }}
+                                        />
+                                    }
+                                />
+                                {showDateTimePicker && (
+                                    <DateTimePicker
+                                        mode="date"
+                                        themeVariant='light'
+                                        display="inline"
+                                        locale="it-IT"
+                                        value={expenseDate ? expenseDate : new Date()}
+                                        onChange={(event, date) => {
+                                            setShowDateTimePicker(false);
+                                            setExpenseDate(date as Date);
                                         }}
                                     />
-                                }
-                            />
-                            {showDateTimePicker && (
-                                <DateTimePicker
-                                    mode="date"
-                                    themeVariant='light'
-                                    display="inline"
-                                    locale="it-IT"
-                                    value={expenseDate ? expenseDate : new Date()}
-                                    onChange={(event, date) => {
-                                        setShowDateTimePicker(false);
-                                        setExpenseDate(date as Date);
-                                    }}
-                                />
-                            )}
-                            <FormErrorMessageComponent text='Campo obbligatorio' field='expenseDate' validationArray={validationErrors} />
-                        </FormControl>
-                        <FormControl style={GlobalStyles.mt15} isRequired={expenseName == "altro"} isInvalid={'expenseDescription' in validationErrors}>
-                            <FormControl.Label>Descrizione della spesa</FormControl.Label>
-                            <TextArea placeholder="es. Taxi per trasferimento aeroporto" onChange={handleExpenseDescriptionChange} autoCompleteType={true} isInvalid={'expenseDescription' in validationErrors} onFocus={scrollToY} tvParallaxProperties={undefined} onTextInput={undefined}></TextArea>
-                            <FormErrorMessageComponent text='Campo obbligatorio con voce "altro" selezionata' field='expenseDescription' validationArray={validationErrors} />
-                        </FormControl>
-                    </View>
-                ) : (
-                    <Text></Text>
-                )}
-            </ScrollView>
+                                )}
+                                <FormErrorMessageComponent text='Campo obbligatorio' field='expenseDate' validationArray={validationErrors} />
+                            </FormControl>
+                            <FormControl style={GlobalStyles.mt15} isRequired={expenseName == "altro"} isInvalid={'expenseDescription' in validationErrors}>
+                                <FormControl.Label>Descrizione della spesa</FormControl.Label>
+                                <TextArea placeholder="es. Taxi per trasferimento aeroporto" onChange={handleExpenseDescriptionChange} autoCompleteType={true} isInvalid={'expenseDescription' in validationErrors} onFocus={scrollToY} tvParallaxProperties={undefined} onTextInput={undefined}></TextArea>
+                                <FormErrorMessageComponent text='Campo obbligatorio con voce "altro" selezionata' field='expenseDescription' validationArray={validationErrors} />
+                            </FormControl>
+                        </View>
+                    ) : (
+                        <Text></Text>
+                    )}
+                </ScrollView>
             </KeyboardAvoidingView>
         </NativeBaseProvider>
     )

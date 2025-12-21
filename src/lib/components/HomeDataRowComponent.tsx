@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { BusinessEvent } from '../models/BusinessEvent';
 import { Pressable, StyleSheet, Text, Alert, Animated, View, Button, I18nManager } from 'react-native';
-import { Row, VStack } from 'native-base';
+import { Row, VStack } from '@gluestack-ui/themed-native-base';
 import { Utility } from '../Utility';
 import { GestureHandlerRootView, RectButton, Swipeable } from 'react-native-gesture-handler';
 import { InputSideButton } from './InputSideButtonComponent';

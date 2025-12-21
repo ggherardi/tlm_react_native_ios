@@ -1,6 +1,6 @@
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { Box, Icon } from 'native-base';
+import { Box, Icon } from '@gluestack-ui/themed-native-base';
 import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import GlobalStyles, { ThemeColors } from '../GlobalStyles';

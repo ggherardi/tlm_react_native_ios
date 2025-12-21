@@ -1,4 +1,4 @@
-import { FormControl, Input, NativeBaseProvider, ScrollView } from 'native-base';
+import { FormControl, Input, NativeBaseProvider, ScrollView } from '@gluestack-ui/themed-native-base';
 import React, { Keyboard, StyleSheet } from 'react-native';
 import GlobalStyles from '../lib/GlobalStyles';
 import { Utility } from '../lib/Utility';
@@ -64,17 +64,17 @@ const ProfileScreen = ({ navigation, route }: any) => {
             <ScrollView contentContainerStyle={[GlobalStyles.container]}>
                 <FormControl style={GlobalStyles.mt15} isRequired isInvalid={"name" in validationErrors}>
                     <FormControl.Label>Nome</FormControl.Label>
-                    <Input defaultValue={name} placeholder="es. Mario" onChange={(e: any) => setName(e.nativeEvent.text)}></Input>
+                    <Input defaultValue={name} placeholder="es. Mario" onChange={setName}></Input>
                     <FormErrorMessageComponent text='Campo obbligatorio' field='name' validationArray={validationErrors} />
                 </FormControl>
                 <FormControl style={GlobalStyles.mt15} isRequired isInvalid={"surname" in validationErrors}>
                     <FormControl.Label>Cognome</FormControl.Label>
-                    <Input defaultValue={surname} placeholder="es. Rossi" onChange={(e: any) => setSurname(e.nativeEvent.text)}></Input>
+                    <Input defaultValue={surname} placeholder="es. Rossi" onChange={setSurname}></Input>
                     <FormErrorMessageComponent text='Campo obbligatorio' field='surname' validationArray={validationErrors} />
                 </FormControl>
                 <FormControl style={GlobalStyles.mt15} isRequired isInvalid={"email" in validationErrors}>
                     <FormControl.Label>Email azienda (per invio nota spesa)</FormControl.Label>
-                    <Input keyboardType='email-address' defaultValue={email} placeholder="es. tl@gmail.com" onChange={(e: any) => setEmail(e.nativeEvent.text)}></Input>
+                    <Input keyboardType='email-address' defaultValue={email} placeholder="es. tl@gmail.com" onChange={setEmail}></Input>
                     <FormErrorMessageComponent text='Campo obbligatorio' field='email' validationArray={validationErrors} />
                 </FormControl>
             </ScrollView>

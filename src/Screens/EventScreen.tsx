@@ -1,4 +1,4 @@
-import { NativeBaseProvider, Row, View } from 'native-base';
+import { NativeBaseProvider, Row, View } from '@gluestack-ui/themed-native-base';
 import React from 'react';
 import { GestureHandlerRootView, ScrollView } from 'react-native-gesture-handler';
 import { useCustomHeaderWithButtonAsync } from '../lib/components/CustomHeaderComponent';
@@ -100,7 +100,7 @@ const EventScreen = ({ route, navigation }: any) => {
                     </ScrollView>
                 ) : (
                     <Context.Provider value={appHeight}>
-                        <View style={{ flex: 1, padding: 10 }} onLayout={(e) => setAppHeight(e.nativeEvent.layout.height)}>
+                        <View style={{ flex: 1, padding: 10 }} onLayout={(e: any) => setAppHeight(e.nativeEvent.layout.height)}>
                             <Image source={Images.empty_list_2.rnSource} style={{ alignSelf: 'center', height: 200, resizeMode: 'contain' }} />
                             <Text style={[styles.text]}>Non sono state trovate spese per l'evento!</Text>
                         </View>

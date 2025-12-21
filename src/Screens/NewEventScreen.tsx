@@ -1,5 +1,5 @@
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { FormControl, Input, KeyboardAvoidingView, NativeBaseProvider, TextArea } from 'native-base';
+import { FormControl, Input, KeyboardAvoidingView, NativeBaseProvider, TextArea } from '@gluestack-ui/themed-native-base';
 import React, { useEffect, useRef, useState } from 'react';
 import { StyleSheet, ScrollView, Alert, Platform } from 'react-native';
 import { InputSideButton } from '../lib/components/InputSideButtonComponent';
@@ -40,10 +40,10 @@ const NewEventScreen = ({ navigation, route }: any) => {
     useCustomHeaderWithButtonAsync(navigation, "Crea nuovo evento", () => saveEvent(), undefined, undefined, isFormValid, 'salva');
   });
 
-  const handleEventNameChange = (e: any) => setEventName(e.nativeEvent.text);
-  const handleEventDescriptionChange = (e: any) => setEventDescription(e.nativeEvent.text);
-  const handleCityChange = (e: any) => setCity(e.nativeEvent.text);
-  const handleCashFundChange = (e: any) => setCashFund(e.nativeEvent.text);
+  const handleEventNameChange = (e: any) => setEventName(e);
+  const handleEventDescriptionChange = (e: any) => setEventDescription(e);
+  const handleCityChange = (e: any) => setCity(e);
+  const handleCashFundChange = (e: any) => setCashFund(e);
 
   const saveEvent = async () => {
     setIsLoading(true);

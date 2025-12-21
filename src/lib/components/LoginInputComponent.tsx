@@ -1,5 +1,5 @@
 import React from 'react';
-import { Input } from 'native-base';
+import { Input } from '@gluestack-ui/themed-native-base';
 import { KeyboardTypeOptions } from 'react-native';
 import { ColorType } from 'native-base/lib/typescript/components/types';
 

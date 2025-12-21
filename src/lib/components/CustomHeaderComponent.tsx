@@ -1,4 +1,4 @@
-import { NativeBaseProvider, VStack } from 'native-base';
+import { NativeBaseProvider, VStack } from '@gluestack-ui/themed-native-base';
 import React, { Pressable, StyleSheet, Text, View } from 'react-native';
 import GlobalStyles, { ThemeColors } from '../GlobalStyles';
 import { color } from 'native-base/lib/typescript/theme/styled-system';
