@@ -201,12 +201,13 @@ const NewEventScreen = ({ navigation, route }: any) => {
               <DateTimePicker
                 mode="date"
                 themeVariant='light'
-                display="inline"
+                display={Platform.OS === 'ios' ? 'inline' : 'default'}
                 locale="it-IT"
                 value={eventStartDate}
                 style={{ alignSelf: 'flex-start' }}
                 onChange={(event, date) => {
                   setShowStartDateTimePicker(false);
+                  if (!date) return;
                   setEventStartDate(date as Date);
                 }}
               />
@@ -236,11 +237,12 @@ const NewEventScreen = ({ navigation, route }: any) => {
               <DateTimePicker
                 mode="date"
                 themeVariant='light'
-                display="inline"
+                display={Platform.OS === 'ios' ? 'inline' : 'default'}
                 locale="it-IT"
                 value={eventEndDate}
                 onChange={(event, date) => {
                   setShowEndDateTimePicker(false);
+                  if (!date) return;
                   setEventEndDate(date as Date);
                 }}
               />
